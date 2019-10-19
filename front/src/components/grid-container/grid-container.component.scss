@@ -4,8 +4,8 @@
     &-container {
         column-gap: 20px;
         display: grid;
-        grid-template-areas: "graph graph"
-                              "map  list";
+        grid-template-areas: "map    map"
+                             "graph  list";
         padding: 0 2%;
         row-gap: 20px;
     }
@@ -13,7 +13,7 @@
     &-graph {
         background-color: orange;
         grid-area: graph;
-        height: 220px;
+        height: 400px;
     }
 
     &-list {
@@ -23,8 +23,8 @@
     }
 
     &-map {
-        background-color: blueviolet;
+        border: 1px solid red;
         grid-area: map;
-        height: 400px;
+        height: 220px;
     }
 }
