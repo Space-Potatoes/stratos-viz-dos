@@ -92,8 +92,12 @@ export class AudienceSelectorComponent implements AfterViewInit {
 	}
 
 	// Methods
-	private selectAudience(audience : Audience) {
+	private selectAudience(audience : Audience, event : MouseEvent) {
 		if (this.audience == audience) return;
+
+		const selector = d3.select(this.selector.nativeElement);
+		selector.select(".checked").classed("checked", false);
+		d3.select(<HTMLSpanElement> event.srcElement).classed("checked", true);
 
 		this.audience = audience;
 		if (this.audienceCallback) this.audienceCallback(this.audience);
