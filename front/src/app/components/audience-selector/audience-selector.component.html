@@ -1,0 +1,35 @@
+<!-- Wrapper -->
+<div #wrapper class="wrapper">
+
+    <!-- Overlay -->
+    <div #overlay class="overlay"></div>
+
+    <!-- Project Logo -->
+    <img #projectLogo class="project-logo" src="../../../assets/logo.png" />
+
+    <!-- Hero Text -->
+    <div #hero class="hero">
+        <div class="hero-inner-wrapper">
+
+            <!-- Prompt -->
+            <span #prompt class="prompt">I am a</span>
+
+            <!-- Selector -->
+            <div #selector class="selector">
+                <span (click)="selectAudience(1, $event)" class="option"><span class="badge">PRO</span> Professional</span>
+                <span (click)="selectAudience(2, $event)" class="option">Enthusiast</span>
+                <span (click)="selectAudience(3, $event)" class="option">Junior Astronaut</span>
+            </div>
+
+        </div>
+    </div>
+
+    <div #bottomRegion class="bottom-region">
+        <!-- Credit -->
+        <span #credit class="credit">Photo by the Canadian Space Agency</span>
+
+        <!-- Team Logo -->
+        <img #teamLogo class="team-logo" src="../../../assets/team.png" />
+    </div>
+
+</div>
