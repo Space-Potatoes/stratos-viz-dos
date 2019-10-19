@@ -1,0 +1,25 @@
+version: '3.5'
+
+services:
+  mongo-dev:
+    hostname: "mongo"
+    build: "."
+    image: "mongo:latest"
+    container_name: "nasa-mongo-dev"
+    ports:
+      - "127.0.0.1:27017:27017"
+    volumes:
+      - ./logs/dev/mongo:/var/log/mongodb
+      - ./data/dev/mongo:/data/db
+    network_mode: "bridge"
+  mongo-demo:
+    hostname: "mongo"
+    build: "."
+    image: "mongo:latest"
+    container_name: "nasa-mongo-demo"
+    ports:
+      - "127.0.0.1:27018:27017"
+    volumes:
+      - ./logs/demo/mongo:/var/log/mongodb
+      - ./data/demo/mongo:/data/db
+    network_mode: "bridge"
