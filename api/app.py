@@ -1,3 +1,4 @@
+import argparse
 from flask import Flask, request
 from flask_restful import Resource, Api
 from pymongo import MongoClient
@@ -237,4 +238,9 @@ api.add_resource(ioctl_hkp, '/TIMMINS2018/IOCTL/ioctl_hkp')
 '''
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    parser = argparse.ArgumentParser(description='A REST API for querying NASA Hackathon data by MISSION_TIME.')
+    parser.add_argument('--host', dest='host', type=str, help='Host or network interface to listen on.', required=True)
+    parser.add_argument('--port', dest='port', type=int, help='The port to listen on.', required=True)
+    parser.add_argument('--debug', dest='debug', type=bool, help='Run in debug mode?', required=True)
+    args = parser.parse_args()
+    app.run(debug=args.debug, host=args.host, port=args.port)
