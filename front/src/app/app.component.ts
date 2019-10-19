@@ -22,7 +22,9 @@ export class AppComponent implements OnInit {
 
 	// Methods
 	onAudienceSelector(audience : Audience) {
-		this.audienceSelector.shrink();
+		
+		// Do something with the new audience
+
 	}
 
 	// Lifecycle
