@@ -1,0 +1,30 @@
+.grid {
+    text-align: center;
+
+    &-container {
+        column-gap: 20px;
+        display: grid;
+        grid-template-areas: "graph graph"
+                              "map  list";
+        padding: 0 2%;
+        row-gap: 20px;
+    }
+
+    &-graph {
+        background-color: orange;
+        grid-area: graph;
+        height: 220px;
+    }
+
+    &-list {
+        background-color: greenyellow;
+        grid-area: list;
+        height: 150px;
+    }
+
+    &-map {
+        background-color: blueviolet;
+        grid-area: map;
+        height: 400px;
+    }
+}
