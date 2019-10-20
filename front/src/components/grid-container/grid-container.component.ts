@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LocationService } from '../../services/location.service.ts/location.service';
+import { LocationService } from '../../services/location/location.service';
 
 @Component({
   selector: 'app-grid-container',
@@ -13,6 +13,11 @@ export class GridContainerComponent implements OnInit {
   ngOnInit() {
   }
 
+  getEvents() {
+    this.locationService.getEvents().subscribe(res => {
+      console.log('getEvents()', res);
+    })
+  }
   getFlightEnvironmentData() {
     this.locationService.getFlightEnvironmentData().subscribe(res => {
       console.log('getFlightEnvironmentData()', res);
@@ -28,29 +33,40 @@ export class GridContainerComponent implements OnInit {
       console.log('getGondolaPositionData()', res);
     })
   }
-  getHardwareTelemetryPacket() {
-    this.locationService.getHardwareTelemetryPacket().subscribe(res => {
-      console.log('getHardwareTelemetryPacket()', res);
-    })
-  }
-  
   getMinMax() {
     this.locationService.getMinMax().subscribe(res => {
-      console.log('min and max data:', res);
-    });
-  }
-
-  getPhotoData() {
-    this.locationService.getPhotoData().subscribe(res => {
-      console.log('image data:', res);
-    });
-  }
-
-  getSoftwareTelemetryPacket() {
-    this.locationService.getSoftwareTelemetryPacket().subscribe(res => {
-      console.log('getSoftwareTelemetryPacket()', res);
+      console.log('getMinMax()', res);
     })
   }
-
+  getPhotoData() {
+    this.locationService.getPhotoData().subscribe(res => {
+      console.log('getPhotoData()', res);
+    })
+  }
+  getSWCDHHardwareHousekeepingData() {
+    this.locationService.getSWCDHHardwareHousekeepingData().subscribe(res => {
+      console.log('getSWCDHHardwareHousekeepingData()', res);
+    })
+  }
+  getSWCDHSoftwareHousekeepingData() {
+    this.locationService.getSWCDHSoftwareHousekeepingData().subscribe(res => {
+      console.log('getSWCDHSoftwareHousekeepingData()', res);
+    })
+  }
+  getSWEMHousekeepingData() {
+    this.locationService.getSWEMHousekeepingData().subscribe(res => {
+      console.log('getSWEMHousekeepingData()', res);
+    })
+  }
+  getSWNAVHousekeepingData() {
+    this.locationService.getSWNAVHousekeepingData().subscribe(res => {
+      console.log('getSWNAVHousekeepingData()', res);
+    })
+  }
+  getIOCTLHousekeepingData() {
+    this.locationService.getIOCTLHousekeepingData().subscribe(res => {
+      console.log('getIOCTLHousekeepingData()', res);
+    })
+  }
 
 }

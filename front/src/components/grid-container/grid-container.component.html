@@ -1,11 +1,15 @@
 <div>
-    <button (click)="getFlightEnvironmentData()">getFlightEnvironmentData()</button>
-    <button (click)="getGondolaAttitudeAndHeadingData()">getGondolaAttitudeAndHeadingData()</button>
-    <button (click)="getGondolaPositionData()">getGondolaPositionData()</button>
-    <button (click)="getHardwareTelemetryPacket()">getHardwareTelemetryPacket()</button>
-    <button (click)="getMinMax()">getMinMax()</button>
-    <button (click)="getPhotoData()">getPhotoData()</button>
-    <button (click)="getSoftwareTelemetryPacket()">getSoftwareTelemetryPacket()</button>
+    <button (click)="getFlightEnvironmentData()">getEvents()</button>
+    <button (click)="getGondolaAttitudeAndHeadingData()">getFlightEnvironmentData()</button>
+    <button (click)="getGondolaPositionData()">getGondolaAttitudeAndHeadingData()</button>
+    <button (click)="getMinMax()">getGondolaPositionData()</button>
+    <button (click)="getPhotoData()">getMinMax()</button>
+    <button (click)="getSWCDHHardwareHousekeepingData()">getPhotoData()</button>
+    <button (click)="getSWCDHSoftwareHousekeepingData()">getSWCDHHardwareHousekeepingData()</button>
+    <button (click)="getSWEMHousekeepingData()">getSWCDHSoftwareHousekeepingData()</button>
+    <button (click)="getSWNAVHousekeepingData()">getSWEMHousekeepingData()</button>
+    <button (click)="getIOCTLHousekeepingData()">getSWNAVHousekeepingData()</button>
+    <button (click)="getEvents()">getIOCTLHousekeepingData()</button>
 </div>
 <div class="grid-container">
     <div class="grid-graph">graph</div>
