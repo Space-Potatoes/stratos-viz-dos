@@ -8,6 +8,9 @@
         display: grid;
 
         grid-template-columns: 1fr 1fr;
+        grid-template-areas: "map    map"
+                             "graph  list"
+                             "gravity gravity";
         row-gap: 16px;
         padding: 16px;
 
@@ -43,4 +46,8 @@
 
     grid-column-start: 1;
     grid-column-end: 3;
+
+    &-gravity {
+        grid-area: gravity;
+    }
 }

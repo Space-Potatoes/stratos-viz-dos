@@ -11,6 +11,7 @@ import { ImageComponent } from '../components/image/image.component';
 import { ClockComponent } from '../components/clock/clock.component'
 import { MapComponent } from '../components/map/map.component';
 import { AppComponent } from './app.component';
+import { GravityComponent } from '../components/gravity/gravity.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { AppComponent } from './app.component';
     ClockComponent,
     AppComponent,
     MapComponent,
+    GravityComponent
   ],
   imports: [
     BrowserModule,
