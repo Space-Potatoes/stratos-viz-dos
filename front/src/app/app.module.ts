@@ -7,6 +7,7 @@ import { AudienceSelectorComponent } from '../components/audience-selector/audie
 import { GridContainerComponent } from '../components/grid-container/grid-container.component';
 import { TemperatureComponent } from '../components/temperature/temperature.component';
 import { AltitudeComponent } from '../components/altitude/altitude.component';
+import { ImageComponent } from '../components/image/image.component';
 import { MapComponent } from '../components/map/map.component';
 import { AppComponent } from './app.component';
 
@@ -16,6 +17,7 @@ import { AppComponent } from './app.component';
     GridContainerComponent,
     TemperatureComponent,
     AltitudeComponent,
+    ImageComponent,
     AppComponent,
     MapComponent,
   ],

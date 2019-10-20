@@ -6,6 +6,7 @@ import { Component, ViewChild, OnInit } from '@angular/core';
 import { Audience } from '../../types/audience';
 import { TimestampListener } from 'src/interfaces/timestamp';
 import { MapComponent } from '../map/map.component';
+import { ImageComponent } from '../image/image.component';
 
 @Component({
   selector: 'app-grid-container',
@@ -17,17 +18,20 @@ export class GridContainerComponent implements OnInit, AudienceListener, Timesta
   // Children
   @ViewChild(TemperatureComponent, undefined) temperatureComponent : TemperatureComponent;
   @ViewChild(AltitudeComponent, undefined) altitudeComponent : AltitudeComponent;
+  @ViewChild(ImageComponent, undefined) imageComponent : ImageComponent;
   @ViewChild(MapComponent, undefined) mapComponent : MapComponent;
 
   // Interface
   public onAudienceChange(audience: Audience) {
     this.temperatureComponent.onAudienceChange(audience);
     this.altitudeComponent.onAudienceChange(audience);
+    this.imageComponent.onAudienceChange(audience);
   }
 
   public onTimeStampChange(timestamp: number) {
     this.temperatureComponent.onTimeStampChange(timestamp);
     this.altitudeComponent.onTimeStampChange(timestamp);
+    this.imageComponent.onTimeStampChange(timestamp);
   }
 
   ngOnInit() {

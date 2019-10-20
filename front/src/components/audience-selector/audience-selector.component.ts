@@ -7,7 +7,7 @@ import * as d3 from "d3";
   templateUrl: './audience-selector.component.html',
   styleUrls: ['./audience-selector.component.scss']
 })
-export class AudienceSelectorComponent implements OnInit {
+export class AudienceSelectorComponent implements AfterViewInit {
 
 	// Children
 	@ViewChild("bottomRegion", undefined) bottomRegion : ElementRef;
@@ -113,8 +113,9 @@ export class AudienceSelectorComponent implements OnInit {
 	}
 
 	// Lifecycle
-	ngOnInit() {
-		d3.select("body").style("overflow", "hidden");
+	ngAfterViewInit() {
+		// window.scroll(0, 0);
+		// d3.select("body").style("overflow", "hidden");
 	}
 
 	// Constructor

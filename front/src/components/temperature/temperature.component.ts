@@ -3,6 +3,7 @@ import { AudienceListener } from '../../interfaces/audience';
 import { Audience } from '../../types/audience';
 import * as d3 from "d3";
 import { TimestampListener } from 'src/interfaces/timestamp';
+import { DataService } from 'src/services/data/data.service';
 
 @Component({
   selector: 'app-temperature',
@@ -332,6 +333,6 @@ export class TemperatureComponent implements AfterViewInit, AudienceListener, Ti
   }
 
   // Constructor
-  constructor() { }
+  constructor(private dataService : DataService) { }
 
 }

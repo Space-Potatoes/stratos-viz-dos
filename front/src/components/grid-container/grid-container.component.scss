@@ -2,7 +2,9 @@
     text-align: center;
 
     &-container {
+        max-width: 1000px;
         column-gap: 16px;
+        margin: 0 auto;
         display: grid;
 
         grid-template-columns: 1fr 1fr;
@@ -24,6 +26,12 @@
     &-altitude {
         max-width: 500px;
         grid-row: 2;
+    }
+
+    &-image {
+        max-width: 500px;
+        grid-column: 1;
+        grid-row: 3;
     }
 
     &-temperature {
