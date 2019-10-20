@@ -1,6 +1,10 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
-import { AudienceSelectorComponent } from './components/audience-selector/audience-selector.component';
+
+// Types
 import { Audience } from 'src/types/audience';
+
+// Components
+import { AudienceSelectorComponent } from '../components/audience-selector/audience-selector.component';
 
 @Component({
   selector: 'app-root',

@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { Audience, TextForAudience } from '../../../types/audience';
+import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Audience, TextForAudience } from '../../types/audience';
 import * as d3 from "d3";
 
 @Component({
