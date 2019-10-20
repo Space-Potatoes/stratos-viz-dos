@@ -1,7 +1,8 @@
-import argparse
+from datetime import datetime
 from flask import Flask, request
 from flask_cors import CORS, cross_origin
 from flask_restful import Resource, Api
+import itertools
 from pymongo import MongoClient
 from bson.json_util import dumps
 
@@ -80,18 +81,34 @@ class swcdh_events(Resource):
             data.append(item)
         return dumps(data)
 
+
+def mid_range(collection, mid):
+    # HACK convert mid to valid format.
+    mid = datetime.utcfromtimestamp(int(mid)).strftime('%Y-%m-%d %H:%M:%S.%f')
+    query_top = {"MISSION_TIME": {"$gte": mid}}
+    query_bottom = {"MISSION_TIME": {"$lt": mid}}
+    top = list(collection.find(query_top))[0:15]
+    # bottom = list(collection.find(query_bottom))[0:15]
+    # for t in top:
+    #    bottom.append(t)
+    # return dumps(bottom)
+    return dumps(top)
+
 class swnav_pos0(Resource):
     def get(self):
-        start = request.args.get('start')
         collection = db.swnav_pos0
+        mid = request.args.get('mid')
+        if mid:
+            return mid_range(collection, mid)
+        start = request.args.get('start')
         if not start:
-            return dumps(collection.find().limit(5000)[1000:])
+            return dumps(collection.find()[1000:6000])
         end = request.args.get('end')
         if not end:
-            return dumps(collection.find().limit(5000)[1000:])
+            return dumps(collection.find()[1000:6000])
         data = []
         query = {"MISSION_TIME": {"$gte": start, "$lt": end}}
-        for item in collection.find(query).limit(5000)[1000:]:
+        for item in collection.find(query)[1000:6000]:
             data.append(item)
         return dumps(data)
 
@@ -108,16 +125,19 @@ class swnav_pos0_min_max(Resource):
 
 class swnav_hkp(Resource):
     def get(self):
-        start = request.args.get('start')
         collection = db.swnav_hkp
+        mid = request.args.get('mid')
+        if mid:
+            return mid_range(collection, mid)
+        start = request.args.get('start')
         if not start:
-            return dumps(collection.find())
+            return dumps(collection.find()[1000:6000])
         end = request.args.get('end')
         if not end:
-            return dumps(collection.find())
+            return dumps(collection.find()[1000:6000])
         data = []
         query = {"MISSION_TIME": {"$gte": start, "$lt": end}}
-        for item in collection.find(query):
+        for item in collection.find(query)[1000:6000]:
             data.append(item)
         return dumps(data)
 
