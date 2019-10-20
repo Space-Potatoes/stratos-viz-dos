@@ -4,8 +4,10 @@
     &-container {
         column-gap: 16px;
         display: grid;
+
         grid-template-areas: "map    map"
-                             "graph  list";
+                             "graph  list"
+                             "graph altitude";
         row-gap: 16px;
         padding: 16px;
 
@@ -30,5 +32,10 @@
     &-map {
         grid-area: map;
         height: 220px;
+    }
+
+    &-altitude {
+        grid-area: altitude;
+        max-width: 500px;
     }
 }
