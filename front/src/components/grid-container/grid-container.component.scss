@@ -2,12 +2,17 @@
     text-align: center;
 
     &-container {
-        column-gap: 20px;
+        column-gap: 16px;
         display: grid;
         grid-template-areas: "map    map"
                              "graph  list";
-        padding: 0 2%;
-        row-gap: 20px;
+        row-gap: 16px;
+        padding: 16px;
+
+        > div {
+            border-radius: 5px;
+            overflow: hidden;
+        }
     }
 
     &-graph {
@@ -23,7 +28,6 @@
     }
 
     &-map {
-        border: 1px solid red;
         grid-area: map;
         height: 220px;
     }
