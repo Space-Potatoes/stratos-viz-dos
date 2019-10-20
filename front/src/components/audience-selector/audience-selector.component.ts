@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit, OnInit } from '@angular/core';
 import { Audience, TextForAudience } from '../../types/audience';
 import * as d3 from "d3";
 
@@ -7,7 +7,7 @@ import * as d3 from "d3";
   templateUrl: './audience-selector.component.html',
   styleUrls: ['./audience-selector.component.scss']
 })
-export class AudienceSelectorComponent implements AfterViewInit {
+export class AudienceSelectorComponent implements OnInit {
 
 	// Children
 	@ViewChild("bottomRegion", undefined) bottomRegion : ElementRef;
@@ -100,6 +100,7 @@ export class AudienceSelectorComponent implements AfterViewInit {
 		if (this.audience == undefined) {
 			selector.classed("checked", false);
 			d3.select(<HTMLSpanElement> event.srcElement).classed("checked", true);
+			d3.select("body").style("overflow", "auto");
 			this.shrink();
 		}
 		else {
@@ -112,7 +113,8 @@ export class AudienceSelectorComponent implements AfterViewInit {
 	}
 
 	// Lifecycle
-	ngAfterViewInit() {
+	ngOnInit() {
+		d3.select("body").style("overflow", "hidden");
 	}
 
 	// Constructor
