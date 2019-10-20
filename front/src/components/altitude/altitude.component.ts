@@ -1,4 +1,5 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { AudienceListener } from '../../interfaces/audience';
 import { Audience } from '../../types/audience';
 import * as d3 from "d3";
 
@@ -7,7 +8,7 @@ import * as d3 from "d3";
   templateUrl: './altitude.component.html',
   styleUrls: ['./altitude.component.scss']
 })
-export class AltitudeComponent implements AfterViewInit {
+export class AltitudeComponent implements AfterViewInit, AudienceListener {
 
   // Children
   @ViewChild("professionalSvg", undefined) professionalSvg : ElementRef;
@@ -34,7 +35,7 @@ export class AltitudeComponent implements AfterViewInit {
     this.redraw();
   }
 
-  private changeAudience(audience : Audience) {
+  public onAudienceChange(audience : Audience) {
     this.audience = audience;
     this.redraw();
   }
@@ -297,7 +298,7 @@ export class AltitudeComponent implements AfterViewInit {
 
   // Lifecycle
   ngAfterViewInit() {
-    this.changeAudience(Audience.Enthusiast);
+    this.onAudienceChange(Audience.Enthusiast);
     this.setData(45, 42.5, 35);
   }
 

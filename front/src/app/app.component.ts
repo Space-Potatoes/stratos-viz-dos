@@ -5,6 +5,7 @@ import { Audience } from 'src/types/audience';
 
 // Components
 import { AudienceSelectorComponent } from '../components/audience-selector/audience-selector.component';
+import { GridContainerComponent } from 'src/components/grid-container/grid-container.component';
 
 @Component({
   selector: 'app-root',
@@ -15,15 +16,14 @@ export class AppComponent implements OnInit {
 
 	// Children
 	@ViewChild(AudienceSelectorComponent, undefined) audienceSelector : AudienceSelectorComponent;
+	@ViewChild(GridContainerComponent, undefined) gridContainer : GridContainerComponent;
 
 	// Variables
 	title = 'stratos-viz-das';
 
 	// Methods
 	onAudienceSelector(audience : Audience) {
-		
-		// Do something with the new audience
-
+		this.gridContainer.onAudienceChange(audience);
 	}
 
 	// Lifecycle
