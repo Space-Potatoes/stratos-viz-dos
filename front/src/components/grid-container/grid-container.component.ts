@@ -69,4 +69,10 @@ export class GridContainerComponent implements OnInit {
     })
   }
 
+  getFinalData() {
+    this.locationService.getFinalData().subscribe(res => {
+      console.log('getFinalData', res);
+    })
+  }
+
 }
