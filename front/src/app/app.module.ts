@@ -8,6 +8,7 @@ import { GridContainerComponent } from '../components/grid-container/grid-contai
 import { TemperatureComponent } from '../components/temperature/temperature.component';
 import { AltitudeComponent } from '../components/altitude/altitude.component';
 import { ImageComponent } from '../components/image/image.component';
+import { ClockComponent } from '../components/clock/clock.component'
 import { MapComponent } from '../components/map/map.component';
 import { AppComponent } from './app.component';
 
@@ -18,6 +19,7 @@ import { AppComponent } from './app.component';
     TemperatureComponent,
     AltitudeComponent,
     ImageComponent,
+    ClockComponent,
     AppComponent,
     MapComponent,
   ],

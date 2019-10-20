@@ -22,6 +22,13 @@
         grid-column-end: 3;
         height: 220px;
     }
+
+    &-clock {
+        grid-column-start: 1;
+        grid-column-end: 3;
+
+        
+    }
 }
 
 .spacer {

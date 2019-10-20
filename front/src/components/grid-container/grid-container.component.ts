@@ -7,6 +7,7 @@ import { Audience } from '../../types/audience';
 import { TimestampListener } from 'src/interfaces/timestamp';
 import { MapComponent } from '../map/map.component';
 import { ImageComponent } from '../image/image.component';
+import { ClockComponent } from '../clock/clock.component';
 
 @Component({
   selector: 'app-grid-container',
@@ -19,6 +20,7 @@ export class GridContainerComponent implements OnInit, AudienceListener, Timesta
   @ViewChild(TemperatureComponent, undefined) temperatureComponent : TemperatureComponent;
   @ViewChild(AltitudeComponent, undefined) altitudeComponent : AltitudeComponent;
   @ViewChild(ImageComponent, undefined) imageComponent : ImageComponent;
+  @ViewChild(ClockComponent, undefined) clockComponent : ClockComponent;
   @ViewChild(MapComponent, undefined) mapComponent : MapComponent;
 
   // Interface
@@ -32,6 +34,7 @@ export class GridContainerComponent implements OnInit, AudienceListener, Timesta
     this.temperatureComponent.onTimeStampChange(timestamp);
     this.altitudeComponent.onTimeStampChange(timestamp);
     this.imageComponent.onTimeStampChange(timestamp);
+    this.clockComponent.onTimeStampChange(timestamp);
   }
 
   ngOnInit() {
