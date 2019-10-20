@@ -39,17 +39,22 @@ export class ImageComponent implements AfterViewInit, AudienceListener, Timestam
     // Professional
     if (this.audience == Audience.Professional) {
       d3.select(this.professional.nativeElement).classed("hidden", false);
+      d3.select(this.enthusiast.nativeElement).classed("hidden", false);
+      d3.select(this.junior.nativeElement).classed("hidden", false);
     }
 
     // Enthusiast
     if (this.audience == Audience.Enthusiast) {
+      d3.select(this.professional.nativeElement).classed("hidden", true);
       d3.select(this.enthusiast.nativeElement).classed("hidden", false);
+      d3.select(this.junior.nativeElement).classed("hidden", false);
     }
 
     // Junior
     if (this.audience == Audience.Junior) {
       d3.select(this.professional.nativeElement).classed("hidden", true);
       d3.select(this.enthusiast.nativeElement).classed("hidden", true);
+      d3.select(this.junior.nativeElement).classed("hidden", false);
     }
 
   }

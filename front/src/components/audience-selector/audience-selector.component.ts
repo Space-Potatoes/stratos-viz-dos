@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, AfterViewInit, OnInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit, OnInit, HostListener } from '@angular/core';
 import { Audience, TextForAudience } from '../../types/audience';
 import * as d3 from "d3";
 
@@ -93,7 +93,7 @@ export class AudienceSelectorComponent implements AfterViewInit {
 	}
 
 	// Methods
-	private selectAudience(audience : Audience, event : MouseEvent) {
+	public selectAudience(audience : Audience, event : MouseEvent) {
 		
 		const selector = d3.select(this.selector.nativeElement).select(".checked");
 
@@ -114,8 +114,14 @@ export class AudienceSelectorComponent implements AfterViewInit {
 
 	// Lifecycle
 	ngAfterViewInit() {
-		// window.scroll(0, 0);
-		// d3.select("body").style("overflow", "hidden");
+
+		if ('scrollRestoration' in history) {
+			// Back off, browser, I got this...
+			history.scrollRestoration = 'manual';
+		}
+
+		window.scroll(0, 0);
+		d3.select("body").style("overflow", "hidden");
 	}
 
 	// Constructor

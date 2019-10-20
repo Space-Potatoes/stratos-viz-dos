@@ -54,9 +54,8 @@ export class MapComponent implements OnInit {
 	public setPoints(points : Point[]) {
 
 		// Set map bounds
-		const destin = new L.LatLng(points[points.length - 1].Latitude, points[points.length - 1].Longitude);
-		const origin = new L.LatLng(points[0].Latitude, points[0].Longitude);
-		this.map.fitBounds(new L.LatLngBounds(origin, destin));
+		const coordinates = points.map(x => [x.Latitude, x.Longitude]);
+		this.map.fitBounds(new L.LatLngBounds(<[number, number][]> coordinates), { padding: [1, 1] });
 
 		// Map points to projections
 		this.pointProjections = points.map(x => {
@@ -159,9 +158,10 @@ export class MapComponent implements OnInit {
 		// Draw the points
 		const origin_point = new Point(48.5704, -81.3694, 0, 0);
 		const destin_point = new Point(48.632, -83.9413, 0, 10);
+		const mid2_point = new Point(48.4, -83.5000, 0, 5);
 		const mid_point = new Point(48.8, -82.6000, 0, 5);
 
-		this.setPoints([origin_point, mid_point, destin_point]);
+		this.setPoints([origin_point, mid2_point, mid_point, destin_point]);
 
 		this.drawPoints();
 		this.drawHoverPoint();

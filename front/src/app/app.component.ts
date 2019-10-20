@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
 	@ViewChild(GridContainerComponent, undefined) gridContainer : GridContainerComponent;
 
 	// Variables
-	title = 'stratos-viz-das';
+	title = 'stratos-vizdas';
 
 	// Methods
 	onAudienceSelector(audience : Audience) {

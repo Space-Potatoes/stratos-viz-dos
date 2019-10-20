@@ -22,20 +22,18 @@
         grid-column-end: 3;
         height: 220px;
     }
+}
 
-    &-altitude {
-        max-width: 500px;
-        grid-row: 2;
-    }
+.spacer {
+    margin-top: 16px;
+}
 
-    &-image {
-        max-width: 500px;
-        grid-column: 1;
-        grid-row: 3;
-    }
+.footer {
+    font-family: Helvetica Neue, Helvetica, sans-serif;
+    padding: 64px 32px 32px 32px;
+    text-align: center;
+    font-size: 12px;
 
-    &-temperature {
-        grid-column: 2;
-        grid-row: 2;
-    }
+    grid-column-start: 1;
+    grid-column-end: 3;
 }

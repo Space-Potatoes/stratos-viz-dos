@@ -12,7 +12,22 @@
 </div>
 <div class="grid-container">
     <app-map class="grid-map"></app-map>
-    <app-altitude class="grid-altitude"></app-altitude>
-    <app-temperature class="grid-temperature"></app-temperature>
-    <app-image class="grid-image"></app-image>
+
+    <!-- Left -->
+    <div class="column">
+        <app-temperature class="grid-temperature"></app-temperature>
+        <div class="spacer"></div>
+        <app-altitude class="grid-altitude"></app-altitude>
+    </div>
+
+    <!-- Right -->
+    <div class="column">
+        <app-image class="grid-image"></app-image>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        Designed and developed by the Space Potatoes Team in 2019<br />
+        Data provided and distributed by the Canadian Space Agency
+    </div>
 </div>
