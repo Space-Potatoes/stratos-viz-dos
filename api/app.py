@@ -247,6 +247,21 @@ class ioctl_hkp(Resource):
 
 class final(Resource):
     def get(self):
+        mid = request.args.get('mid')
+        if not mid:
+            return 400, ''
+        mid = datetime.utcfromtimestamp(int(mid)).strftime('%Y-%m-%d %H:%M:%S.%f')
+        collection = db.final
+        bottom_query = {"MISSION_TIME": {"$gte": mid}, "IMAGE_PATH": {"$regex": ".*NADIR"}}
+        front_query = {"MISSION_TIME": {"$gte": mid}, "IMAGE_PATH": {"$regex": ".*HOR"}}
+        bottom = collection.find_one(bottom_query)
+        front = collection.find_one(front_query)
+        result = {
+            "bottom_view": dumps(bottom),
+            "front_view": dumps(front)
+        }
+        return result
+        '''
         start = request.args.get('start')
         collection = db.final
         if not start:
@@ -259,6 +274,7 @@ class final(Resource):
         for item in collection.find(query):
             data.append(item)
         return dumps(data)
+        '''
 
 
 api.add_resource(HelloWorld, '/')
