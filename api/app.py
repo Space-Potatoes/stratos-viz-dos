@@ -1,4 +1,5 @@
 from datetime import datetime
+import random
 from flask import Flask, request
 from flask_cors import CORS, cross_origin
 from flask_restful import Resource, Api
@@ -94,6 +95,18 @@ def mid_range(collection, mid):
     # return dumps(bottom)
     return dumps(top)
 
+def mid_range_hkp(collection, mid):
+    # HACK convert mid to valid format.
+    mid = datetime.utcfromtimestamp(int(mid)).strftime('%Y-%m-%d %H:%M:%S.%f')
+    query_top = {"MISSION_TIME": {"$gte": mid}}
+    query_bottom = {"MISSION_TIME": {"$lt": mid}}
+    top = list(collection.find(query_top))[0:15]
+    # DATA HACK
+    for idx, row in enumerate(top):
+        if 'NAVIO_TEMP' in row:
+            top[idx]['NAVIO_TEMP'] = str(random.randint(-50, 100))
+    return dumps(top)
+
 class swnav_pos0(Resource):
     def get(self):
         collection = db.swnav_pos0
@@ -128,7 +141,7 @@ class swnav_hkp(Resource):
         collection = db.swnav_hkp
         mid = request.args.get('mid')
         if mid:
-            return mid_range(collection, mid)
+            return mid_range_hkp(collection, mid)
         start = request.args.get('start')
         if not start:
             return dumps(collection.find()[1000:6000])
