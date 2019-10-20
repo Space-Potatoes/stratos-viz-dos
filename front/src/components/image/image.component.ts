@@ -33,11 +33,15 @@ export class ImageComponent implements AfterViewInit, AudienceListener, Timestam
     this.redraw();
 
     this.dataService.getImageInfo(timestamp).subscribe(info => {
-      const bot_img = this.dataService.getImage(info.bottom_view);
-      const frt_img = this.dataService.getImage(info.front_view);
 
-      d3.select(this.junior.nativeElement).attr("src", bot_img);
-      d3.select(this.enthusiast.nativeElement).attr("src", frt_img);
+      const bottom_view = JSON.parse(info.bottom_view);
+      const front_view = JSON.parse(info.front_view);
+
+      const bot_img = this.dataService.getImage(bottom_view);
+      const frt_img = this.dataService.getImage(front_view);
+
+      d3.select(this.junior.nativeElement).select("img").attr("src", null).attr("src", bot_img);
+      d3.select(this.enthusiast.nativeElement).select("img").attr("src", null).attr("src", frt_img);
     });
   }
 

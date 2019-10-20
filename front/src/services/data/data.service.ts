@@ -56,12 +56,13 @@ export class DataService {
   getImageInfo(timestamp? : number) : Observable<any> {
     let params = new HttpParams();
     if (timestamp) params = params.append('mid', "" + timestamp);
-    return this.http.get(`${this.apiUrl}/TIMMINS2018/final`, { params });
+    return this.http.get(`${this.apiUrl}/final`, { params });
   }
 
   getImage(item : any) : string {
     const path = item.IMAGE_PATH + "/" + item.IMAGE_NAME;
-    return this.apiUrl + ":8080/" + path;
+    const url = this.apiUrl.split("/")[2];
+    return "http://" + url + ":8000/" + path;
   }
 
   getGondolaPositionData(timestamp? : number): Observable<any> {
