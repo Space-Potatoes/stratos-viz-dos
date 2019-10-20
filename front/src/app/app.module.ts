@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 // Components
 import { AudienceSelectorComponent } from '../components/audience-selector/audience-selector.component';
 import { GridContainerComponent } from '../components/grid-container/grid-container.component';
+import { TemperatureComponent } from '../components/temperature/temperature.component';
 import { AltitudeComponent } from '../components/altitude/altitude.component';
 import { MapComponent } from '../components/map/map.component';
 import { AppComponent } from './app.component';
@@ -12,6 +13,7 @@ import { AppComponent } from './app.component';
   declarations: [
     AudienceSelectorComponent,
     GridContainerComponent,
+    TemperatureComponent,
     AltitudeComponent,
     AppComponent,
     MapComponent,

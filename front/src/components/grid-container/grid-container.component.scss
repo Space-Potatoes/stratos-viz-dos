@@ -5,9 +5,7 @@
         column-gap: 16px;
         display: grid;
 
-        grid-template-areas: "map    map"
-                             "graph  list"
-                             "graph altitude";
+        grid-template-columns: 1fr 1fr;
         row-gap: 16px;
         padding: 16px;
 
@@ -17,25 +15,19 @@
         }
     }
 
-    &-graph {
-        background-color: orange;
-        grid-area: graph;
-        height: 400px;
-    }
-
-    &-list {
-        background-color: greenyellow;
-        grid-area: list;
-        height: 150px;
-    }
-
     &-map {
-        grid-area: map;
+        grid-column-start: 1;
+        grid-column-end: 3;
         height: 220px;
     }
 
     &-altitude {
-        grid-area: altitude;
         max-width: 500px;
+        grid-row: 2;
+    }
+
+    &-temperature {
+        grid-column: 2;
+        grid-row: 2;
     }
 }

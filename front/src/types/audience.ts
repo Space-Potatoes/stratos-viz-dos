@@ -5,7 +5,7 @@ export function TextForAudience(audience : Audience) {
 }
 
 export enum Audience {
-    Professional = 1,
+    Professional = 3,
     Enthusiast = 2,
-    Junior = 3
+    Junior = 1
 }

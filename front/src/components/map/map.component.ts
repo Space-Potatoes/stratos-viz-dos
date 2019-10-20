@@ -59,7 +59,7 @@ export class MapComponent implements OnInit {
 		this.pointProjections.sort((x, y) => x.PX - y.PX);
 	}
 
-	private mouseMove() {
+	private drawHoverPoint() {
 
 		// Gather data
 		const overlay = d3.select(this.overlay.nativeElement);
@@ -85,7 +85,9 @@ export class MapComponent implements OnInit {
 		}
 
 		// Calculate the X
-		const x = event.offsetX;
+		if (event) var x = event.offsetX;
+		else var x = this.pointProjections[0].PX;
+		
 		var y = undefined;
 
 		// Calculate the Y
@@ -134,7 +136,7 @@ export class MapComponent implements OnInit {
 		}).addTo(this.map);
 
 		// Add mouse event listener
-		d3.select(this.overlay.nativeElement).on("mousemove", () => this.mouseMove());
+		d3.select(this.overlay.nativeElement).on("mousemove", () => this.drawHoverPoint());
 
 		// Draw the points
 		const origin_point = new Point(48.5704, -81.3694, 0);
@@ -142,7 +144,9 @@ export class MapComponent implements OnInit {
 		const mid_point = new Point(48.8, -82.6000, 0);
 
 		this.setPoints([origin_point, mid_point, destin_point]);
+
 		this.drawPoints();
+		this.drawHoverPoint();
 	}
 
 	// Constructor

@@ -1,7 +1,8 @@
-import { AudienceListener } from '../../interfaces/audience';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Audience } from '../../types/audience';
+import { TemperatureComponent } from '../temperature/temperature.component';
 import { AltitudeComponent } from '../altitude/altitude.component';
+import { AudienceListener } from '../../interfaces/audience';
+import { Component, ViewChild } from '@angular/core';
+import { Audience } from '../../types/audience';
 
 @Component({
   selector: 'app-grid-container',
@@ -11,10 +12,12 @@ import { AltitudeComponent } from '../altitude/altitude.component';
 export class GridContainerComponent implements AudienceListener {
   
   // Children
+  @ViewChild(TemperatureComponent, undefined) temperatureComponent : TemperatureComponent;
   @ViewChild(AltitudeComponent, undefined) altitudeComponent : AltitudeComponent;
 
   // Interface
   public onAudienceChange(audience: Audience) {
+    this.temperatureComponent.onAudienceChange(audience);
     this.altitudeComponent.onAudienceChange(audience);
   }
 

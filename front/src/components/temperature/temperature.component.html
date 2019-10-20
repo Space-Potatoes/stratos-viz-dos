@@ -1,0 +1,57 @@
+<div class="wrapper">
+    <h3>Temperature</h3>
+
+    <!-- Junior Astronaut -->
+    <div #junior class="junior-astronaut">
+        
+        <!-- Temperature Bar -->
+        <div class="bar">
+
+            <!-- Snowflake -->
+            <img class="icon" src="../../assets/ico_snowflake.png" />
+
+            <!-- Value bar -->
+            <div class="value-bar">
+                <div class="fill"></div>
+            </div>
+
+            <!-- Sun -->
+            <img class="icon" src="../../assets/ico_sun.png" />
+
+        </div>
+
+        <div class="bottom">
+            <!-- Text -->
+            <div class="text">
+                30° C
+            </div>
+
+            <!-- Buttons -->
+            <div class="buttons">
+                <span (click)="unitChangeOnClick($event)" class="c selected">C</span>
+                <span (click)="unitChangeOnClick($event)" class="f">F</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Enthusiast -->
+    <div #enthusiast class="enthusiast">
+        <div class="buttons">
+            <span (click)="unitChangeOnClick($event)" class="c selected">C</span>
+            <span (click)="unitChangeOnClick($event)" class="f">F</span>
+        </div>
+        <svg #enthusiastSvg class="enthusiast-svg"></svg>
+    </div>
+
+    <!-- Professional -->
+    <div #professional class="professional">
+        <div class="buttons">
+            <span (click)="unitChangeOnClick($event)" class="c selected">C</span>
+            <span (click)="unitChangeOnClick($event)" class="f">F</span>
+            <span (click)="unitChangeOnClick($event)" class="k">K</span>
+        </div>
+        <svg #professionalSvg class="enthusiast-svg"></svg>
+    </div>
+
+</div>
