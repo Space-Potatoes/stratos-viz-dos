@@ -11,6 +11,7 @@ export class AltitudeComponent implements AfterViewInit {
   // Children
   @ViewChild("professionalSvg", undefined) professionalSvg : ElementRef;
   @ViewChild("enthusiastSvg", undefined) enthusiastSvg : ElementRef;
+  @ViewChild("junior", undefined) junior : ElementRef;
 
   // Variables
   prevHeight : number;
@@ -23,7 +24,7 @@ export class AltitudeComponent implements AfterViewInit {
     this.nextHeight = nextHeight;
     this.height = height;
 
-    this.drawProfessional();
+    this.drawJunior();
   }
 
   private drawProfessional() {
@@ -145,26 +146,37 @@ export class AltitudeComponent implements AfterViewInit {
     axisBot.text("30KM");
 
     // Draw value line
-    const valHeight = (1 - (42500 - min) / (max - min)) * box.height;
+    const valPct = (this.height * 1000 - min) / (max - min);
+    const valHeight = (1 - valPct) * box.height;
 
     const valLine = svg.append("line").classed("val-line", true);
     valLine.attr("y1", valHeight).attr("y2", valHeight);
     valLine.attr("x1", 0).attr("x2", box.width);
-    valLine.attr("stroke-width", 2);
+    valLine.attr("stroke-width", 3);
     valLine.attr("stroke", "navy");
 
     const valText = svg.append("text").classed("val-text", true);
     valText.style("font-family", "Helvetica Neue, Helvetica, sans-serif");
-    valText.attr("y", valHeight - 10);
+    valText.attr("y", Math.max(valHeight - 10, 25));
+    valText.text(`${this.height}KM`);
     valText.attr("fill", "navy");
-    valText.text("42.5KM");
     valText.attr("x", 16);
+  }
 
+  private drawJunior() {
+    const container = d3.select(this.junior.nativeElement);
+    const cnTowerHeight = 553;
+
+    const mult = Math.round((this.height * 1000) / cnTowerHeight);
+    const val = Math.round(this.height);
+
+    container.selectAll(".mult-value").text(mult);
+    container.select(".value").text(this.height + "KM");
   }
 
   // Lifecycle
   ngAfterViewInit() {
-    this.setData(45, 50, 35);
+    this.setData(45, 42.5, 35);
   }
 
   // Constructor
