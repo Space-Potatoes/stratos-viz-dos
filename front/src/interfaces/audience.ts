@@ -1,5 +1,5 @@
-export interface Audience {
-    onAudienceChange: (audience: number) => {
-        // do things with audience
-    };
+import { Audience } from "../types/audience";
+
+export interface AudienceListener {
+    onAudienceChange (audience: Audience);
 }

@@ -1,5 +1,3 @@
-export interface Timestamp {
-    onTimeStampChange: (timestamp: string) => {
-        // do things with the timestamp
-    };
+export interface TimestampListener {
+    onTimeStampChange (timestamp: number);
 }
