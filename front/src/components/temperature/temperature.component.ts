@@ -39,7 +39,6 @@ export class TemperatureComponent implements AfterViewInit, AudienceListener, Ti
     this.prevTemperature = prevTemperature;
     this.nextTemperature = nextTemperature;
     this.temperature = temperature;
-
     this.redraw();
   }
 
@@ -52,8 +51,19 @@ export class TemperatureComponent implements AfterViewInit, AudienceListener, Ti
   }
 
   public onTimeStampChange(timestamp : number) {
-    console.log("Fetch new data here!");
-    this.setData(-20 + timestamp, 50 - timestamp, 100 - timestamp);
+    
+    this.dataService.getSWNAVHousekeepingData(timestamp).subscribe(x => {
+      const array = JSON.parse(x);
+      const mid = Math.floor(array.length / 2);
+
+			const points = array.map(item => {
+        const num = Number.parseInt(item.NAVIO_TEMP);
+        return num;
+      });
+
+      this.setData(points[mid - 2], points[mid], points[mid + 2]);
+
+    });
   }
 
   public unitChangeOnClick(event : MouseEvent) {
@@ -212,11 +222,6 @@ export class TemperatureComponent implements AfterViewInit, AudienceListener, Ti
     labelNext.attr("x", yAxisBox.width + labelPrevBox.width + labelCurrBox.width + 80);
 
     // Add circles
-    const prevCircle = svg.append("circle").classed("prevCircle", true);
-    prevCircle.attr("cx", yAxisBox.width + 20 + labelPrevBox.width / 2);
-    prevCircle.attr("cy", scale(this.unitConv(this.prevTemperature)));
-    prevCircle.attr("fill", "red");
-    prevCircle.attr("r", 3);
 
     const prevLine = svg.append("line").classed("prevLine", true);
     prevLine.attr("x1", yAxisBox.width + 20 + labelPrevBox.width / 2);
@@ -226,11 +231,6 @@ export class TemperatureComponent implements AfterViewInit, AudienceListener, Ti
     prevLine.attr("stroke-width", "2");
     prevLine.attr("stroke", "#1464AC");
 
-    const currPoint = svg.append("circle").classed("currCircle", true);
-    currPoint.attr("cx", yAxisBox.width + labelPrevBox.width + 50 + labelCurrBox.width / 2);
-    currPoint.attr("cy", scale(this.unitConv(this.temperature)));
-    currPoint.attr("r", 3);
-
     const currLine = svg.append("line").classed("currLine", true);
     currLine.attr("x1", yAxisBox.width + labelPrevBox.width + 50 + labelCurrBox.width / 2);
     currLine.attr("y1", scale(this.unitConv(this.temperature)));
@@ -238,6 +238,17 @@ export class TemperatureComponent implements AfterViewInit, AudienceListener, Ti
     currLine.attr("y2", scale(this.unitConv(this.nextTemperature)));
     currLine.attr("stroke-width", "2");
     currLine.attr("stroke", "#1464AC");
+
+    const prevCircle = svg.append("circle").classed("prevCircle", true);
+    prevCircle.attr("cx", yAxisBox.width + 20 + labelPrevBox.width / 2);
+    prevCircle.attr("cy", scale(this.unitConv(this.prevTemperature)));
+    prevCircle.attr("fill", "red");
+    prevCircle.attr("r", 3);
+    
+    const currPoint = svg.append("circle").classed("currCircle", true);
+    currPoint.attr("cx", yAxisBox.width + labelPrevBox.width + 50 + labelCurrBox.width / 2);
+    currPoint.attr("cy", scale(this.unitConv(this.temperature)));
+    currPoint.attr("r", 3);
 
     const nextCircle = svg.append("circle").classed("nextCircle", true);
     nextCircle.attr("cx", yAxisBox.width + labelPrevBox.width + labelCurrBox.width + 80 + labelNextBox.width / 2);
@@ -265,8 +276,10 @@ export class TemperatureComponent implements AfterViewInit, AudienceListener, Ti
     yAxisElement.call(yAxis);
 
     const bar = svg.select(".bar");
-    bar.attr("height", scale(min) - scale(this.unitConv(this.temperature)));
-    bar.attr("y", scale(this.unitConv(this.temperature)));
+    bar
+      .transition().duration(250)
+      .attr("height", scale(min) - scale(this.unitConv(this.temperature)))
+      .attr("y", scale(this.unitConv(this.temperature)));
   }
   private drawEnthusiast() {
 
@@ -330,7 +343,6 @@ export class TemperatureComponent implements AfterViewInit, AudienceListener, Ti
   // Lifecycle
   ngAfterViewInit() {
     this.onAudienceChange(Audience.Enthusiast);
-    this.setData(45, 75, 35);
   }
 
   // Constructor

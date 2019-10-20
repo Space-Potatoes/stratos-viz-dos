@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DataService } from "../../services/data/data.service";
 import { Point } from "../../types/point";
+import * as moment from "moment";
 import * as L from 'leaflet';
 import * as d3 from "d3";
 
@@ -16,6 +17,8 @@ export class MapComponent implements OnInit {
 
 	// Variables
 	private pointProjections : PointProjection[];
+	private prevTimestamp : number;
+	private nextTimestamp : number;
 	private maxTime : number;
 	private minTime : number;
 	public map : L.Map;
@@ -98,8 +101,8 @@ export class MapComponent implements OnInit {
 		if (event) var x = event.offsetX;
 		else var x = this.pointProjections[0].PX;
 		
-		var timestamp = undefined;
-		var y = undefined;
+		var timestamp = 0;
+		var y = 0;
 
 		// Calculate the Y
 		for (var i = 0; i < this.pointProjections.length - 1; ++i) {
@@ -109,8 +112,9 @@ export class MapComponent implements OnInit {
 			if (point.PX <= x && next.PX >= x) {
 				const pct = (x - point.PX) / (next.PX - point.PX);
 
-				timestamp = pct * (next.Point.Timestamp - point.Point.Timestamp);
-				timestamp += point.Point.Timestamp;
+				// timestamp = pct * (next.Point.Timestamp - point.Point.Timestamp);
+				// timestamp += point.Point.Timestamp;
+				timestamp = point.Point.Timestamp;
 
 				y = pct * (next.PY - point.PY) + point.PY;
 			}
@@ -120,8 +124,14 @@ export class MapComponent implements OnInit {
 		if (y) {
 			hoverCircle.attr("cx", x).attr("cy", y);
 			guideLine.attr("x1", x).attr("x2", x);
-			
-			if (this.TimestampChanged) this.TimestampChanged(timestamp);
+			this.nextTimestamp = timestamp;
+		}
+	}
+
+	private overlayClick() {
+		if (this.prevTimestamp != this.nextTimestamp) {
+			if (this.TimestampChanged) this.TimestampChanged(this.nextTimestamp);
+			this.prevTimestamp = this.nextTimestamp;
 		}
 	}
 
@@ -155,17 +165,32 @@ export class MapComponent implements OnInit {
 
 		// Add mouse event listener
 		d3.select(this.overlay.nativeElement).on("mousemove", () => this.drawHoverPoint());
+		d3.select(this.overlay.nativeElement).on("click", () => this.overlayClick());
 
 		// Draw the points
-		const origin_point = new Point(48.5704, -81.3694, 0, 0);
-		const destin_point = new Point(48.632, -83.9413, 0, 10);
-		const mid2_point = new Point(48.4, -83.5000, 0, 5);
-		const mid_point = new Point(48.8, -82.6000, 0, 5);
+		this.dataService.getGondolaPositionData().subscribe(x => {
+			
+			const array = JSON.parse(x);
+			var points = [];
 
-		this.setPoints([origin_point, mid2_point, mid_point, destin_point]);
+			for (var i = 0; i < array.length; ++i) {
+				if (i % 20 != 0) continue;
+				
+				const item = array[i];
+				const _moment = moment(item.MISSION_TIME).utc().unix();
+				const point = new Point(Number.parseFloat(item.LAT),
+								 Number.parseFloat(item.LONG), 
+								 Number.parseFloat(item.ALT), 
+								 _moment);
 
-		this.drawPoints();
-		this.drawHoverPoint();
+				points.push(point);
+			}
+			this.setPoints(points);
+
+			this.drawPoints();
+			this.drawHoverPoint();
+		});
+
 	}
 
 	// Constructor

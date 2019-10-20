@@ -1,9 +1,11 @@
 import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { AudienceListener } from '../../interfaces/audience';
-import { Audience } from '../../types/audience';
-import * as d3 from "d3";
 import { TimestampListener } from 'src/interfaces/timestamp';
 import { DataService } from 'src/services/data/data.service';
+import { Audience } from '../../types/audience';
+import { Point } from '../../types/point';
+import * as moment from "moment";
+import * as d3 from "d3";
 
 @Component({
   selector: 'app-altitude',
@@ -30,9 +32,10 @@ export class AltitudeComponent implements AfterViewInit, AudienceListener, Times
 
   // Methods
   public setData(prevHeight : number, height : number, nextHeight : number) {
-    this.prevHeight = prevHeight;
-    this.nextHeight = nextHeight;
-    this.height = height;
+    
+    this.prevHeight = prevHeight + (Math.random() * 4 - 2) * 100;
+    this.nextHeight = nextHeight + (Math.random() * 4 - 2) * 100;
+    this.height = height + (Math.random() * 4 - 2) * 100;
 
     this.redraw();
   }
@@ -43,8 +46,23 @@ export class AltitudeComponent implements AfterViewInit, AudienceListener, Times
   }
 
   public onTimeStampChange(timestamp: number) {
-    console.log("Fetch new data and apply!");
-    this.setData(40 + timestamp, 30 + timestamp, 50 - timestamp);
+
+		this.dataService.getGondolaPositionData(timestamp).subscribe(x => {
+			
+      const array = JSON.parse(x);
+      const mid = Math.floor(array.length / 2);
+
+			const points = array.map(item => {
+				const _moment = moment(item.MISSION_TIME).utc().unix();
+				return new Point(Number.parseFloat(item.LAT),
+								 Number.parseFloat(item.LONG), 
+								 Number.parseFloat(item.ALT), 
+								 _moment);
+      });
+
+      if (points.length <= mid + 2) return;
+      this.setData(points[mid - 2].Altitude, points[mid].Altitude, points[mid + 2].Altitude);
+		});
   }
 
   private redraw() {
@@ -89,31 +107,31 @@ export class AltitudeComponent implements AfterViewInit, AudienceListener, Times
     const svg = d3.select(this.professionalSvg.nativeElement);
     const box = (<SVGElement> svg.node()).getBoundingClientRect();
 
-    const max = 50000; // 50km in meters
-    const min = 30000; // 30km as the minimum
+    const max = 36700;
+    const min = 36000;
 
-    const scale = d3.scaleLinear().range([box.height - 20, 5]).domain([min / 1000, max / 1000]);
+    const scale = d3.scaleLinear().range([box.height - 20, 5]).domain([min, max]);
 
     // Add bars
     const prevBar = svg.select(".prevBar");
     prevBar
       .transition()
       .duration(250)
-      .attr("height", scale(30) - scale(this.prevHeight))
+      .attr("height", scale(min) - scale(this.prevHeight))
       .attr("y", scale(this.prevHeight));
 
     const currBar = svg.select(".currBar");
     currBar
       .transition()
       .duration(250)
-      .attr("height", scale(30) - scale(this.height))
+      .attr("height", scale(min) - scale(this.height))
       .attr("y", scale(this.height));
 
     const nextBar = svg.select(".nextBar");
     nextBar
       .transition()
       .duration(250)
-      .attr("height", scale(30) - scale(this.nextHeight))
+      .attr("height", scale(min) - scale(this.nextHeight))
       .attr("y", scale(this.nextHeight));
 
   }
@@ -122,10 +140,10 @@ export class AltitudeComponent implements AfterViewInit, AudienceListener, Times
     const svg = d3.select(this.professionalSvg.nativeElement);
     const box = (<SVGElement> svg.node()).getBoundingClientRect();
 
-    const max = 50000; // 50km in meters
-    const min = 30000; // 30km as the minimum
+    const max = 36700;
+    const min = 36000;
 
-    const scale = d3.scaleLinear().range([box.height - 20, 5]).domain([min / 1000, max / 1000]);
+    const scale = d3.scaleLinear().range([box.height - 20, 5]).domain([min, max]);
     const yAxis = d3.axisLeft(scale);
 
     // Add the left axis
@@ -164,7 +182,7 @@ export class AltitudeComponent implements AfterViewInit, AudienceListener, Times
 
     // Add bars
     const prevBar = svg.append("rect").classed("prevBar", true);
-    prevBar.attr("height", scale(30) - scale(this.prevHeight));
+    prevBar.attr("height", scale(min) - scale(this.prevHeight));
     prevBar.attr("y", scale(this.prevHeight));
     prevBar.attr("width", labelPrevBox.width);
     prevBar.attr("x", yAxisBox.width + 20);
@@ -173,7 +191,7 @@ export class AltitudeComponent implements AfterViewInit, AudienceListener, Times
 
     const currBar = svg.append("rect").classed("currBar", true);
     currBar.attr("x", yAxisBox.width + labelPrevBox.width + 50);
-    currBar.attr("height", scale(30) - scale(this.height));
+    currBar.attr("height", scale(min) - scale(this.height));
     currBar.attr("width", labelCurrBox.width);
     currBar.attr("y", scale(this.height));
     currBar.attr("fill", "#E4514D");
@@ -181,7 +199,7 @@ export class AltitudeComponent implements AfterViewInit, AudienceListener, Times
 
     const nextBar = svg.append("rect").classed("nextBar", true);
     nextBar.attr("x", yAxisBox.width + labelPrevBox.width + labelCurrBox.width + 80);
-    nextBar.attr("height", scale(30) - scale(this.nextHeight));
+    nextBar.attr("height", scale(min) - scale(this.nextHeight));
     nextBar.attr("width", labelCurrBox.width);
     nextBar.attr("y", scale(this.nextHeight));
     nextBar.attr("fill", "#1464AC");
@@ -198,11 +216,11 @@ export class AltitudeComponent implements AfterViewInit, AudienceListener, Times
     const svg = d3.select(this.enthusiastSvg.nativeElement);
     const box = (<SVGElement> svg.node()).getBoundingClientRect();
 
-    const max = 50000; // 50km in meters
-    const min = 30000; // 30km as the minimum
+    const max = 37000;
+    const min = 35000;
 
     // Draw value line
-    const valPct = (this.height * 1000 - min) / (max - min);
+    const valPct = (this.height - min) / (max - min);
     const valHeight = (1 - valPct) * box.height;
 
     const valLine = svg.select(".val-line");
@@ -217,7 +235,7 @@ export class AltitudeComponent implements AfterViewInit, AudienceListener, Times
       .transition()
       .duration(250)
       .attr("y", Math.max(valHeight - 10, 25))
-      .text(`${this.height}KM`);
+      .text(`${Math.round(this.height)}KM`);
 
   }
   private drawEnthusiast() {
@@ -225,8 +243,8 @@ export class AltitudeComponent implements AfterViewInit, AudienceListener, Times
     const svg = d3.select(this.enthusiastSvg.nativeElement);
     const box = (<SVGElement> svg.node()).getBoundingClientRect();
 
-    const max = 50000; // 50km in meters
-    const min = 30000; // 30km as the minimum
+    const max = 37000; // 50km in meters
+    const min = 35000; // 30km as the minimum
 
     // Draw min line
     const minLine = svg.append("line").classed("min-line", true);
@@ -263,17 +281,17 @@ export class AltitudeComponent implements AfterViewInit, AudienceListener, Times
     axisTop.attr("y", 25).style("opacity", 0.5);
     axisTop.attr("x", box.width - 50);
     axisTop.attr("fill", "#6799C5");
-    axisTop.text("50KM");
+    axisTop.text("37KM");
 
     const axisBot = svg.append("text").classed("axisTop", true);
     axisBot.style("font-family", "Helvetica Neue, Helvetica, sans-serif");
     axisBot.attr("y", box.height - 20).style("opacity", 0.5);
     axisBot.attr("x", box.width - 50);
     axisBot.attr("fill", "#6799C5");
-    axisBot.text("30KM");
+    axisBot.text("35KM");
 
     // Draw value line
-    const valPct = (this.height * 1000 - min) / (max - min);
+    const valPct = (this.height - min) / (max - min);
 
     const valLine = svg.append("line").classed("val-line", true);
     valLine.attr("x1", 0).attr("x2", box.width);

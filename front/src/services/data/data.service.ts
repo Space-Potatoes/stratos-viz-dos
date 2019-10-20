@@ -1,6 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Point } from '../../types/point';
 import { Observable } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'
@@ -11,10 +13,7 @@ export class DataService {
   constructor(private http: HttpClient) { }
 
   getEvents(): Observable<object> {
-    return this.http.get(`${this.apiUrl}/NAVEM/swem_event`).pipe(x => {
-      console.log(x);
-      return x;
-    });
+    return this.http.get(`${this.apiUrl}/NAVEM/swem_event`);
   }
 
   getFlightEnvironmentData(): Observable<object> {
@@ -23,10 +22,6 @@ export class DataService {
   
   getGondolaAttitudeAndHeadingData(): Observable<object> {
     return this.http.get(`${this.apiUrl}/NAVEM/swem_ahr0`);
-  }
-  
-  getGondolaPositionData(): Observable<object> {
-    return this.http.get(`${this.apiUrl}/NAVEM/swnav_pos0`);
   }
   
   getIOCTLHousekeepingData(): Observable<object> {
@@ -53,8 +48,17 @@ export class DataService {
     return this.http.get(`${this.apiUrl}/CDH/HKP/swem_hk`);
   }
   
-  getSWNAVHousekeepingData(): Observable<object> {
-    return this.http.get(`${this.apiUrl}/NAVEM/swnav_hkp`);
+  // Edited
+  getGondolaPositionData(timestamp? : number): Observable<any> {
+    let params = new HttpParams();
+    if (timestamp) params = params.append('mid', "" + timestamp);
+    return this.http.get(`${this.apiUrl}/NAVEM/swnav_pos0`, { params });
+  }
+
+  getSWNAVHousekeepingData(timestamp? : number): Observable<any> {
+    let params = new HttpParams();
+    if (timestamp) params = params.append('mid', "" + timestamp);
+    return this.http.get(`${this.apiUrl}/NAVEM/swnav_hkp`, { params });
   }
 
 }
