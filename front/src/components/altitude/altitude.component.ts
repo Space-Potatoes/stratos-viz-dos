@@ -312,8 +312,8 @@ export class AltitudeComponent implements AfterViewInit, AudienceListener, Times
     const container = d3.select(this.junior.nativeElement);
     const cnTowerHeight = 553;
 
-    const mult = Math.round((this.height * 1000) / cnTowerHeight);
-    const val = Math.round(this.height);
+    const mult = Math.round((this.height) / cnTowerHeight);
+    const val = Math.round(this.height / 1000);
 
     const mult_value = container.selectAll(".mult-value");
     mult_value.transition().duration(250).style("opacity", 0);
