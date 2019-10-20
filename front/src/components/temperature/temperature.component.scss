@@ -28,7 +28,7 @@ h3 {
         display: flex;
 
         .value-bar {
-            background: #DDDDDD;
+            background: #EBF0F5;
             align-self: center;
             border-radius: 5px;
             overflow: hidden;
@@ -41,14 +41,14 @@ h3 {
                 height: 100%;
                 width: 30%;
 
-                background: orange;
+                background: #6799C5;
             }
         }
     }
 
     .text {
         font-family: Helvetica Neue, Helvetica, sans-serif;
-        color: darkcyan;
+        color: #1464AC;
         font-weight: 500;
         font-size: 24px;
 

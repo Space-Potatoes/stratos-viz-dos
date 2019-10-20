@@ -88,7 +88,7 @@ export class AudienceSelectorComponent implements AfterViewInit {
 
 		// Recolor overlay
 		const overlay = d3.select(this.overlay.nativeElement);
-		overlay.transition().duration(1000).style("background-color", "darkcyan");
+		overlay.transition().duration(1000).style("background-color", "#1464AC");
 
 	}
 

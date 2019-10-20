@@ -168,19 +168,24 @@ export class AltitudeComponent implements AfterViewInit, AudienceListener, Times
     prevBar.attr("y", scale(this.prevHeight));
     prevBar.attr("width", labelPrevBox.width);
     prevBar.attr("x", yAxisBox.width + 20);
-    prevBar.attr("fill", "red");
+    prevBar.attr("fill", "#1464AC");
+    prevBar.attr("rx", "5");
 
     const currBar = svg.append("rect").classed("currBar", true);
     currBar.attr("x", yAxisBox.width + labelPrevBox.width + 50);
     currBar.attr("height", scale(30) - scale(this.height));
     currBar.attr("width", labelCurrBox.width);
     currBar.attr("y", scale(this.height));
+    currBar.attr("fill", "#E4514D");
+    currBar.attr("rx", "5");
 
     const nextBar = svg.append("rect").classed("nextBar", true);
     nextBar.attr("x", yAxisBox.width + labelPrevBox.width + labelCurrBox.width + 80);
     nextBar.attr("height", scale(30) - scale(this.nextHeight));
     nextBar.attr("width", labelCurrBox.width);
     nextBar.attr("y", scale(this.nextHeight));
+    nextBar.attr("fill", "#1464AC");
+    nextBar.attr("rx", "5");
 
     this.hasDrawnProfessional = true;
   }
@@ -225,14 +230,14 @@ export class AltitudeComponent implements AfterViewInit, AudienceListener, Times
 
     // Draw min line
     const minLine = svg.append("line").classed("min-line", true);
-    minLine.attr("stroke", "darkcyan").attr("stroke-dasharray", 4);
+    minLine.attr("stroke", "#6799C5").attr("stroke-dasharray", 4);
     minLine.attr("x1", 0).attr("x2", box.width);
     minLine.attr("y1", 0).attr("y2", 0);
     minLine.attr("stroke-width", 3);
 
     // Draw max line
     const maxLine = svg.append("line").classed("max-line", true);
-    maxLine.attr("stroke", "darkcyan").attr("stroke-dasharray", 4);
+    maxLine.attr("stroke", "#6799C5").attr("stroke-dasharray", 4);
     maxLine.attr("y1", box.height).attr("y2", box.height);
     maxLine.attr("x1", 0).attr("x2", box.width);
     maxLine.attr("stroke-width", 3);
@@ -240,7 +245,7 @@ export class AltitudeComponent implements AfterViewInit, AudienceListener, Times
     // Draw range background
     const background = svg.append("rect").classed("background", true);
     background.attr("width", box.width).attr("height", box.height - 10);
-    background.attr("fill", "darkcyan").style("opacity", 0.5);
+    background.attr("fill", "#6799C5").style("opacity", 0.5);
     background.attr("x", 0).attr("y", 5);
     background.attr("rx", 5);
 
@@ -248,7 +253,7 @@ export class AltitudeComponent implements AfterViewInit, AudienceListener, Times
     const text = svg.append("text").classed("text", true);
     text.style("font-family", "Helvetica Neue, Helvetica, sans-serif");
     text.attr("y", box.height / 2).style("opacity", 0.5);
-    text.attr("fill", "darkcyan");
+    text.attr("fill", "#6799C5");
     text.text("Stratosphere");
     text.attr("x", 16);
 
@@ -257,29 +262,28 @@ export class AltitudeComponent implements AfterViewInit, AudienceListener, Times
     axisTop.style("font-family", "Helvetica Neue, Helvetica, sans-serif");
     axisTop.attr("y", 25).style("opacity", 0.5);
     axisTop.attr("x", box.width - 50);
-    axisTop.attr("fill", "darkcyan");
+    axisTop.attr("fill", "#6799C5");
     axisTop.text("50KM");
 
     const axisBot = svg.append("text").classed("axisTop", true);
     axisBot.style("font-family", "Helvetica Neue, Helvetica, sans-serif");
     axisBot.attr("y", box.height - 20).style("opacity", 0.5);
     axisBot.attr("x", box.width - 50);
-    axisBot.attr("fill", "darkcyan");
+    axisBot.attr("fill", "#6799C5");
     axisBot.text("30KM");
 
     // Draw value line
     const valPct = (this.height * 1000 - min) / (max - min);
-    const valHeight = (1 - valPct) * box.height;
 
     const valLine = svg.append("line").classed("val-line", true);
     valLine.attr("x1", 0).attr("x2", box.width);
+    valLine.attr("stroke", "#E4514D");
     valLine.attr("stroke-width", 3);
-    valLine.attr("stroke", "navy");
 
     const valText = svg.append("text").classed("val-text", true);
     valText.style("font-family", "Helvetica Neue, Helvetica, sans-serif");
     valText.text(`${this.height}KM`);
-    valText.attr("fill", "navy");
+    valText.attr("fill", "#1464AC");
     valText.attr("x", 16);
 
     this.hasDrawnEnthusiast = true;

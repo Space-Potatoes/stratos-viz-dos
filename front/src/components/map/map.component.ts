@@ -35,7 +35,7 @@ export class MapComponent implements OnInit {
 		// Position line
 		line.attr("x1", from.PX).attr("y1", from.PY)
 			.attr("x2", to.PX).attr("y2", to.PY)
-			.attr("stroke", "darkcyan")
+			.attr("stroke", "#6799C5")
 			.attr("stroke-width", 5)
 			;
 	}
@@ -47,7 +47,7 @@ export class MapComponent implements OnInit {
 			.attr("cx", point.PX)
 			.attr("cy", point.PY)
 			.attr("r", 7)
-			.attr("fill", "darkcyan");
+			.attr("fill", "#1464AC");
 
 	}
 
@@ -82,7 +82,7 @@ export class MapComponent implements OnInit {
 			const height = (<SVGElement> overlay.node()).getBoundingClientRect().height;
 
 			guideLine = overlay.append("line").classed("guideLine", true);
-			guideLine.attr("stroke-width", 3).attr("stroke", "green");
+			guideLine.attr("stroke-width", 3).attr("stroke", "#1464AC");
 			guideLine.attr("y1", 0).attr("y2", height);
 		}
 
@@ -91,7 +91,7 @@ export class MapComponent implements OnInit {
 
 		if (hoverCircle.empty()) {
 			hoverCircle = overlay.append("circle").classed("hover", true);
-			hoverCircle.attr("r", 10).attr("fill", "red");
+			hoverCircle.attr("r", 10).attr("fill", "#E4514D");
 		}
 
 		// Calculate the X
@@ -130,14 +130,15 @@ export class MapComponent implements OnInit {
 		const first = this.pointProjections[0];
 		const last = this.pointProjections[this.pointProjections.length - 1];
 
-		this.drawPoint(first);
-		this.drawPoint(last);
-
 		for (var i = 0; i < this.pointProjections.length - 1; ++i) {
 			const next = this.pointProjections[i + 1];
 			const point = this.pointProjections[i];
 			this.drawLine(point, next);
 		}
+
+		this.drawPoint(first);
+		this.drawPoint(last);
+
 	}
 
 	// Lifecycle

@@ -216,33 +216,33 @@ export class TemperatureComponent implements AfterViewInit, AudienceListener, Ti
     prevCircle.attr("cx", yAxisBox.width + 20 + labelPrevBox.width / 2);
     prevCircle.attr("cy", scale(this.unitConv(this.prevTemperature)));
     prevCircle.attr("fill", "red");
-    prevCircle.attr("r", 2);
+    prevCircle.attr("r", 3);
 
     const prevLine = svg.append("line").classed("prevLine", true);
     prevLine.attr("x1", yAxisBox.width + 20 + labelPrevBox.width / 2);
     prevLine.attr("y1", scale(this.unitConv(this.prevTemperature)));
     prevLine.attr("x2", yAxisBox.width + labelPrevBox.width + 50 + labelCurrBox.width / 2);
     prevLine.attr("y2", scale(this.unitConv(this.temperature)));
-    prevLine.attr("stroke-width", "1");
-    prevLine.attr("stroke", "black");
+    prevLine.attr("stroke-width", "2");
+    prevLine.attr("stroke", "#1464AC");
 
     const currPoint = svg.append("circle").classed("currCircle", true);
     currPoint.attr("cx", yAxisBox.width + labelPrevBox.width + 50 + labelCurrBox.width / 2);
     currPoint.attr("cy", scale(this.unitConv(this.temperature)));
-    currPoint.attr("r", 2);
+    currPoint.attr("r", 3);
 
     const currLine = svg.append("line").classed("currLine", true);
     currLine.attr("x1", yAxisBox.width + labelPrevBox.width + 50 + labelCurrBox.width / 2);
     currLine.attr("y1", scale(this.unitConv(this.temperature)));
     currLine.attr("x2", yAxisBox.width + labelPrevBox.width + labelCurrBox.width + 80 + labelNextBox.width / 2);
     currLine.attr("y2", scale(this.unitConv(this.nextTemperature)));
-    currLine.attr("stroke-width", "1");
-    currLine.attr("stroke", "black");
+    currLine.attr("stroke-width", "2");
+    currLine.attr("stroke", "#1464AC");
 
     const nextCircle = svg.append("circle").classed("nextCircle", true);
     nextCircle.attr("cx", yAxisBox.width + labelPrevBox.width + labelCurrBox.width + 80 + labelNextBox.width / 2);
     nextCircle.attr("cy", scale(this.unitConv(this.nextTemperature)));
-    nextCircle.attr("r", 2);
+    nextCircle.attr("r", 3);
 
     this.hasDrawnProfessional = true;
   }
@@ -302,7 +302,8 @@ export class TemperatureComponent implements AfterViewInit, AudienceListener, Ti
     bar.attr("y", scale(this.unitConv(this.temperature)));
     bar.attr("x", yAxisBox.width + 20);
     bar.attr("width", labelBox.width);
-    bar.attr("fill", "red");
+    bar.attr("fill", "#E4514D");
+    bar.attr("rx", "5");
 
     this.hasDrawnEnthusiast = true;
   }
@@ -323,7 +324,7 @@ export class TemperatureComponent implements AfterViewInit, AudienceListener, Ti
     if (this.unitConv == this.toKelvin) unit = "K";
 
     const text = container.selectAll(".text");
-    text.text(this.unitConv(this.temperature) + "° " + unit);
+    text.text(Math.round(this.unitConv(this.temperature)) + "° " + unit);
   }
 
   // Lifecycle
