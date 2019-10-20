@@ -1,14 +1,15 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { AudienceListener } from '../../interfaces/audience';
 import { Audience } from '../../types/audience';
 import * as d3 from "d3";
+import { TimestampListener } from 'src/interfaces/timestamp';
 
 @Component({
   selector: 'app-altitude',
   templateUrl: './altitude.component.html',
   styleUrls: ['./altitude.component.scss']
 })
-export class AltitudeComponent implements AfterViewInit, AudienceListener {
+export class AltitudeComponent implements AfterViewInit, AudienceListener, TimestampListener {
 
   // Children
   @ViewChild("professionalSvg", undefined) professionalSvg : ElementRef;
@@ -38,6 +39,11 @@ export class AltitudeComponent implements AfterViewInit, AudienceListener {
   public onAudienceChange(audience : Audience) {
     this.audience = audience;
     this.redraw();
+  }
+
+  public onTimeStampChange(timestamp: number) {
+    console.log("Fetch new data and apply!");
+    this.setData(40 + timestamp, 30 + timestamp, 50 - timestamp);
   }
 
   private redraw() {

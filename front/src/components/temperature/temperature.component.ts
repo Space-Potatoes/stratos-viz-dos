@@ -2,13 +2,14 @@ import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angula
 import { AudienceListener } from '../../interfaces/audience';
 import { Audience } from '../../types/audience';
 import * as d3 from "d3";
+import { TimestampListener } from 'src/interfaces/timestamp';
 
 @Component({
   selector: 'app-temperature',
   templateUrl: './temperature.component.html',
   styleUrls: ['./temperature.component.scss']
 })
-export class TemperatureComponent implements AfterViewInit, AudienceListener {
+export class TemperatureComponent implements AfterViewInit, AudienceListener, TimestampListener {
 
   // Children
   @ViewChild("professionalSvg", undefined) professionalSvg : ElementRef;
@@ -47,6 +48,11 @@ export class TemperatureComponent implements AfterViewInit, AudienceListener {
     }
     this.audience = audience;
     this.redraw();
+  }
+
+  public onTimeStampChange(timestamp : number) {
+    console.log("Fetch new data here!");
+    this.setData(-20 + timestamp, 50 - timestamp, 100 - timestamp);
   }
 
   public unitChangeOnClick(event : MouseEvent) {
@@ -143,18 +149,20 @@ export class TemperatureComponent implements AfterViewInit, AudienceListener {
     prevCircle.transition().duration(250).attr("cy", scale(this.unitConv(this.prevTemperature)));
 
     const prevLine = svg.select(".prevLine");
-    prevLine.transition().duration(250).attr("y1", scale(this.unitConv(this.prevTemperature)));
-    prevLine.transition().duration(250).attr("y2", scale(this.unitConv(this.temperature)));
+    prevLine.transition().duration(250)
+      .attr("y1", scale(this.unitConv(this.prevTemperature)))
+      .attr("y2", scale(this.unitConv(this.temperature)));
 
     const currCircle = svg.select(".currCircle");
     currCircle.transition().duration(250).attr("cy", scale(this.unitConv(this.temperature)));
 
-    const currLine = svg.select(".nextLine");
-    currLine.transition().duration(250).attr("y1", scale(this.unitConv(this.temperature)));
-    currLine.transition().duration(250).attr("y2", scale(this.unitConv(this.nextTemperature)));
+    const currLine = svg.select(".currLine");
+    currLine.transition().duration(250)
+      .attr("y1", scale(this.unitConv(this.temperature)))
+      .attr("y2", scale(this.unitConv(this.nextTemperature)));
 
     const nextCircle = svg.select(".nextCircle");
-    nextCircle.transition().duration(250).attr("c", scale(this.unitConv(this.nextTemperature)));
+    nextCircle.transition().duration(250).attr("cy", scale(this.unitConv(this.nextTemperature)));
   }
   private drawProfessional() {
     

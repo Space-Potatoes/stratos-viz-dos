@@ -1,20 +1,23 @@
 import { TemperatureComponent } from '../temperature/temperature.component';
-import { LocationService } from '../../services/location/location.service';
 import { AltitudeComponent } from '../altitude/altitude.component';
+import { DataService } from '../../services/data/data.service';
 import { AudienceListener } from '../../interfaces/audience';
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { Audience } from '../../types/audience';
+import { TimestampListener } from 'src/interfaces/timestamp';
+import { MapComponent } from '../map/map.component';
 
 @Component({
   selector: 'app-grid-container',
   templateUrl: './grid-container.component.html',
   styleUrls: ['./grid-container.component.scss']
 })
-export class GridContainerComponent implements AudienceListener {
+export class GridContainerComponent implements OnInit, AudienceListener, TimestampListener {
   
   // Children
   @ViewChild(TemperatureComponent, undefined) temperatureComponent : TemperatureComponent;
   @ViewChild(AltitudeComponent, undefined) altitudeComponent : AltitudeComponent;
+  @ViewChild(MapComponent, undefined) mapComponent : MapComponent;
 
   // Interface
   public onAudienceChange(audience: Audience) {
@@ -22,12 +25,19 @@ export class GridContainerComponent implements AudienceListener {
     this.altitudeComponent.onAudienceChange(audience);
   }
 
-  // Constructor
-  constructor(private locationService: LocationService) { }
-
-  ngOnInit() {
+  public onTimeStampChange(timestamp: number) {
+    this.temperatureComponent.onTimeStampChange(timestamp);
+    this.altitudeComponent.onTimeStampChange(timestamp);
   }
 
+  ngOnInit() {
+    this.mapComponent.OnTimestampChanged((x) => this.onTimeStampChange(x));
+  }
+
+  // Constructor
+  constructor(private locationService: DataService) {}
+
+  // Location service
   getEvents() {
     this.locationService.getEvents().subscribe(res => {
       console.log('getEvents()', res);
@@ -83,5 +93,4 @@ export class GridContainerComponent implements AudienceListener {
       console.log('getIOCTLHousekeepingData()', res);
     })
   }
-
 }

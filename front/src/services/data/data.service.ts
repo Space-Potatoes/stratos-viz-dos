@@ -1,17 +1,20 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class LocationService {
+export class DataService {
   public apiUrl = 'http://134.190.188.170/TIMMINS2018';
 
   constructor(private http: HttpClient) { }
 
   getEvents(): Observable<object> {
-    return this.http.get(`${this.apiUrl}/NAVEM/swem_event`);
+    return this.http.get(`${this.apiUrl}/NAVEM/swem_event`).pipe(x => {
+      console.log(x);
+      return x;
+    });
   }
 
   getFlightEnvironmentData(): Observable<object> {

@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { DataService } from "../../services/data/data.service";
 import { Point } from "../../types/point";
 import * as L from 'leaflet';
 import * as d3 from "d3";
@@ -15,7 +16,15 @@ export class MapComponent implements OnInit {
 
 	// Variables
 	private pointProjections : PointProjection[];
+	private maxTime : number;
+	private minTime : number;
 	public map : L.Map;
+
+	// Events
+	private TimestampChanged : (timestamp : number) => void;
+	public OnTimestampChanged(callback : (timestamp : number) => void) {
+		this.TimestampChanged = callback;
+	}
 
 	// Methods
 	private drawLine(from : PointProjection, to : PointProjection) {
@@ -52,6 +61,8 @@ export class MapComponent implements OnInit {
 		// Map points to projections
 		this.pointProjections = points.map(x => {
 			const proj = this.map.latLngToLayerPoint(new L.LatLng(x.Latitude, x.Longitude));
+			if (!this.maxTime || x.Timestamp > this.maxTime) this.maxTime = x.Timestamp;
+			if (!this.minTime || x.Timestamp < this.maxTime) this.minTime = x.Timestamp;
 			return new PointProjection(x, proj.x, proj.y);
 		});
 
@@ -88,6 +99,7 @@ export class MapComponent implements OnInit {
 		if (event) var x = event.offsetX;
 		else var x = this.pointProjections[0].PX;
 		
+		var timestamp = undefined;
 		var y = undefined;
 
 		// Calculate the Y
@@ -97,6 +109,10 @@ export class MapComponent implements OnInit {
 
 			if (point.PX <= x && next.PX >= x) {
 				const pct = (x - point.PX) / (next.PX - point.PX);
+
+				timestamp = pct * (next.Point.Timestamp - point.Point.Timestamp);
+				timestamp += point.Point.Timestamp;
+
 				y = pct * (next.PY - point.PY) + point.PY;
 			}
 		}
@@ -105,6 +121,8 @@ export class MapComponent implements OnInit {
 		if (y) {
 			hoverCircle.attr("cx", x).attr("cy", y);
 			guideLine.attr("x1", x).attr("x2", x);
+			
+			if (this.TimestampChanged) this.TimestampChanged(timestamp);
 		}
 	}
 
@@ -139,9 +157,9 @@ export class MapComponent implements OnInit {
 		d3.select(this.overlay.nativeElement).on("mousemove", () => this.drawHoverPoint());
 
 		// Draw the points
-		const origin_point = new Point(48.5704, -81.3694, 0);
-		const destin_point = new Point(48.632, -83.9413, 0);
-		const mid_point = new Point(48.8, -82.6000, 0);
+		const origin_point = new Point(48.5704, -81.3694, 0, 0);
+		const destin_point = new Point(48.632, -83.9413, 0, 10);
+		const mid_point = new Point(48.8, -82.6000, 0, 5);
 
 		this.setPoints([origin_point, mid_point, destin_point]);
 
@@ -150,7 +168,7 @@ export class MapComponent implements OnInit {
 	}
 
 	// Constructor
-	constructor() { }
+	constructor(private dataService : DataService) { }
 }
 
 class PointProjection {
