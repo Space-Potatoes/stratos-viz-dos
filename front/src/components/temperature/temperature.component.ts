@@ -198,7 +198,7 @@ export class TemperatureComponent implements AfterViewInit, AudienceListener, Ti
     labelPrev.style("font-family", "Helvetica Neue, Helvetica, sans-serif");
     labelPrev.style("font-size", "12px");
     labelPrev.attr("y", box.height - 0);
-    labelPrev.text("-1 Min");
+    labelPrev.text("Previous");
 
     const labelPrevBox = (<SVGElement> labelPrev.node()).getBoundingClientRect();
     labelPrev.attr("x", yAxisBox.width + 20);
@@ -216,7 +216,7 @@ export class TemperatureComponent implements AfterViewInit, AudienceListener, Ti
     labelNext.style("font-family", "Helvetica Neue, Helvetica, sans-serif");
     labelNext.style("font-size", "12px");
     labelNext.attr("y", box.height - 0);
-    labelNext.text("+1 Min");
+    labelNext.text("Next");
 
     const labelNextBox = (<SVGElement> labelNext.node()).getBoundingClientRect();
     labelNext.attr("x", yAxisBox.width + labelPrevBox.width + labelCurrBox.width + 80);
