@@ -17,6 +17,10 @@ export class DataService {
     });
   }
 
+  getFinalData(): Observable<object> {
+    return this.http.get(`${this.apiUrl}/final`);
+  }
+
   getFlightEnvironmentData(): Observable<object> {
     return this.http.get(`${this.apiUrl}/NAVEM/swem_em0`);
   }
@@ -50,7 +54,7 @@ export class DataService {
   }
   
   getSWEMHousekeepingData(): Observable<object> {
-    return this.http.get(`${this.apiUrl}/CDH/HKP/swem_hk`);
+    return this.http.get(`${this.apiUrl}/NAVEM/swem_hk`);
   }
   
   getSWNAVHousekeepingData(): Observable<object> {

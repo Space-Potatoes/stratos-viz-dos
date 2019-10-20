@@ -100,4 +100,11 @@ export class GridContainerComponent implements OnInit, AudienceListener, Timesta
       console.log('getIOCTLHousekeepingData()', res);
     })
   }
+
+  getFinalData() {
+    this.locationService.getFinalData().subscribe(res => {
+      console.log('getFinalData', res);
+    })
+  }
+
 }
