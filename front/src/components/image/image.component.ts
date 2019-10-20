@@ -30,8 +30,15 @@ export class ImageComponent implements AfterViewInit, AudienceListener, Timestam
   }
 
   public onTimeStampChange(timestamp : number) {
-    // TODO: Change button to have a link to the large pictures
     this.redraw();
+
+    this.dataService.getImageInfo(timestamp).subscribe(info => {
+      const bot_img = this.dataService.getImage(info.bottom_view);
+      const frt_img = this.dataService.getImage(info.front_view);
+
+      d3.select(this.junior.nativeElement).attr("src", bot_img);
+      d3.select(this.enthusiast.nativeElement).attr("src", frt_img);
+    });
   }
 
   private redraw() {
