@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpClientModule } from "@angular/common/http";
 
 // Components
 import { AudienceSelectorComponent } from '../components/audience-selector/audience-selector.component';
@@ -19,7 +20,8 @@ import { AppComponent } from './app.component';
     MapComponent,
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
