@@ -1,7 +1,7 @@
 <!--
 <div>
-    <button (click)="getGondolaAttitudeAndHeadingData()">gondola attitude()</button>
-    <button (click)="getGondolaPositionData()">gondola position()</button>
+    <button (click)="getEvents()">get events()</button>
+    <button (click)="getFinalData()">get final()</button>
     <button (click)="getIOCTLHousekeepingData()">ioctl()</button>
     <button (click)="getMinMax()">minmax()</button>
     <button (click)="getPhotoData()">photo data()</button>
@@ -21,6 +21,8 @@
         <app-temperature class="grid-temperature"></app-temperature>
         <div class="spacer"></div>
         <app-altitude class="grid-altitude"></app-altitude>
+        <div class="spacer"></div>
+        <app-gravity class="grid-gravity"></app-gravity>
     </div>
 
     <!-- Right -->
