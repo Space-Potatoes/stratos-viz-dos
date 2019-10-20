@@ -1,4 +1,5 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Audience } from '../../types/audience';
 import * as d3 from "d3";
 
 @Component({
@@ -11,12 +12,18 @@ export class AltitudeComponent implements AfterViewInit {
   // Children
   @ViewChild("professionalSvg", undefined) professionalSvg : ElementRef;
   @ViewChild("enthusiastSvg", undefined) enthusiastSvg : ElementRef;
+  @ViewChild("professional", undefined) professional : ElementRef;
+  @ViewChild("enthusiast", undefined) enthusiast : ElementRef;
   @ViewChild("junior", undefined) junior : ElementRef;
 
   // Variables
-  prevHeight : number;
-  nextHeight : number;
-  height : number;
+  hasDrawnProfessional : boolean = false;
+  hasDrawnEnthusiast : boolean = false;
+
+  prevHeight : number = 0;
+  nextHeight : number = 0;
+  height : number = 0;
+  audience : Audience;
 
   // Methods
   public setData(prevHeight : number, height : number, nextHeight : number) {
@@ -24,9 +31,84 @@ export class AltitudeComponent implements AfterViewInit {
     this.nextHeight = nextHeight;
     this.height = height;
 
-    this.drawJunior();
+    this.redraw();
   }
 
+  private changeAudience(audience : Audience) {
+    this.audience = audience;
+    this.redraw();
+  }
+
+  private redraw() {
+
+    // Professional
+    if (this.audience == Audience.Professional) {
+
+      d3.select(this.professional.nativeElement).classed("hidden", false);
+      d3.select(this.enthusiast.nativeElement).classed("hidden", true);
+      d3.select(this.junior.nativeElement).classed("hidden", true);
+
+      this.updateProfessional();
+    }
+
+    // Enthusiast
+    if (this.audience == Audience.Enthusiast) {
+
+      d3.select(this.professional.nativeElement).classed("hidden", true);
+      d3.select(this.enthusiast.nativeElement).classed("hidden", false);
+      d3.select(this.junior.nativeElement).classed("hidden", true);
+
+      this.updateEnthusiast();
+    }
+
+    // Junior
+    if (this.audience == Audience.Junior) {
+
+      d3.select(this.professional.nativeElement).classed("hidden", true);
+      d3.select(this.enthusiast.nativeElement).classed("hidden", true);
+      d3.select(this.junior.nativeElement).classed("hidden", false);
+
+      this.updateJunior();
+    }
+
+  }
+
+  private updateProfessional() {
+
+    if (!this.hasDrawnProfessional) this.drawProfessional();
+
+    // Gather data
+    const svg = d3.select(this.professionalSvg.nativeElement);
+    const box = (<SVGElement> svg.node()).getBoundingClientRect();
+
+    const max = 50000; // 50km in meters
+    const min = 30000; // 30km as the minimum
+
+    const scale = d3.scaleLinear().range([box.height - 20, 5]).domain([min / 1000, max / 1000]);
+
+    // Add bars
+    const prevBar = svg.select(".prevBar");
+    prevBar
+      .transition()
+      .duration(250)
+      .attr("height", scale(30) - scale(this.prevHeight))
+      .attr("y", scale(this.prevHeight));
+
+    const currBar = svg.select(".currBar");
+    currBar
+      .transition()
+      .duration(250)
+      .attr("height", scale(30) - scale(this.height))
+      .attr("y", scale(this.height));
+
+    const nextBar = svg.select(".nextBar");
+    nextBar
+      .transition()
+      .duration(250)
+      .attr("height", scale(30) - scale(this.nextHeight))
+      .attr("y", scale(this.nextHeight));
+
+  }
   private drawProfessional() {
     
     const svg = d3.select(this.professionalSvg.nativeElement);
@@ -91,8 +173,40 @@ export class AltitudeComponent implements AfterViewInit {
     nextBar.attr("height", scale(30) - scale(this.nextHeight));
     nextBar.attr("width", labelCurrBox.width);
     nextBar.attr("y", scale(this.nextHeight));
+
+    this.hasDrawnProfessional = true;
   }
 
+  private updateEnthusiast() {
+
+    if (!this.hasDrawnEnthusiast) this.drawEnthusiast();
+
+    // Gather data
+    const svg = d3.select(this.enthusiastSvg.nativeElement);
+    const box = (<SVGElement> svg.node()).getBoundingClientRect();
+
+    const max = 50000; // 50km in meters
+    const min = 30000; // 30km as the minimum
+
+    // Draw value line
+    const valPct = (this.height * 1000 - min) / (max - min);
+    const valHeight = (1 - valPct) * box.height;
+
+    const valLine = svg.select(".val-line");
+    valLine
+      .transition()
+      .duration(250)
+      .attr("y1", valHeight)
+      .attr("y2", valHeight);
+
+    const valText = svg.select(".val-text");
+    valText
+      .transition()
+      .duration(250)
+      .attr("y", Math.max(valHeight - 10, 25))
+      .text(`${this.height}KM`);
+
+  }
   private drawEnthusiast() {
 
     const svg = d3.select(this.enthusiastSvg.nativeElement);
@@ -150,32 +264,40 @@ export class AltitudeComponent implements AfterViewInit {
     const valHeight = (1 - valPct) * box.height;
 
     const valLine = svg.append("line").classed("val-line", true);
-    valLine.attr("y1", valHeight).attr("y2", valHeight);
     valLine.attr("x1", 0).attr("x2", box.width);
     valLine.attr("stroke-width", 3);
     valLine.attr("stroke", "navy");
 
     const valText = svg.append("text").classed("val-text", true);
     valText.style("font-family", "Helvetica Neue, Helvetica, sans-serif");
-    valText.attr("y", Math.max(valHeight - 10, 25));
     valText.text(`${this.height}KM`);
     valText.attr("fill", "navy");
     valText.attr("x", 16);
+
+    this.hasDrawnEnthusiast = true;
   }
 
-  private drawJunior() {
+  private updateJunior() {
+
     const container = d3.select(this.junior.nativeElement);
     const cnTowerHeight = 553;
 
     const mult = Math.round((this.height * 1000) / cnTowerHeight);
     const val = Math.round(this.height);
 
-    container.selectAll(".mult-value").text(mult);
-    container.select(".value").text(this.height + "KM");
+    const mult_value = container.selectAll(".mult-value");
+    mult_value.transition().duration(250).style("opacity", 0);
+    mult_value.transition().duration(250).delay(250).style("opacity", 1).text(mult);
+
+    const value = container.select(".value");
+    value.transition().duration(250).style("opacity", 0);
+    value.transition().duration(250).delay(250).style("opacity", 1).text(val + "KM");
+
   }
 
   // Lifecycle
   ngAfterViewInit() {
+    this.changeAudience(Audience.Enthusiast);
     this.setData(45, 42.5, 35);
   }
 
