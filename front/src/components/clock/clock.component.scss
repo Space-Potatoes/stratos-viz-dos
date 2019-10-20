@@ -1,0 +1,12 @@
+.wrapper {
+    grid-template-columns: auto auto;
+    display: grid;
+
+    font-family: Helvetica Neue, Helvetica, sans-serif;
+    color: #888888;
+    font-weight: 500;
+
+    .time {
+        text-align: right;
+    }
+}

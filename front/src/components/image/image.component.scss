@@ -1,0 +1,47 @@
+.wrapper {
+    background: #FFFFFF;
+    border-radius: 5px;
+    padding: 16px;
+
+    > div {
+        grid-column: 1;
+        grid-row: 2;
+
+        &.hidden {
+            display: none;
+        }
+    }
+}
+
+img {
+    border-radius: 5px;
+    overflow: hidden;
+    width: 100%;
+
+    background: #DDDDDD;
+    min-height: 150px;
+}
+
+h3 {
+    font-family: Helvetica Neue, Helvetica, sans-serif;
+    margin: 0px 0px 16px 0px;
+}
+
+h5 {
+    font-family: Helvetica Neue, Helvetica, sans-serif;
+    margin: 16px 0px 8px 0px;
+    color: #1464AC;
+}
+
+.professional {
+    text-align: right;
+
+    button {
+        background: white;
+        border-radius: 6px;
+        text-align: right;
+        margin-top: 16px;
+        padding: 16px;
+        outline: none;
+    }
+}

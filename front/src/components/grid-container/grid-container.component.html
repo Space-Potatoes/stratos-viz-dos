@@ -1,0 +1,39 @@
+<!--
+<div>
+    <button (click)="getEvents()">get events()</button>
+    <button (click)="getFinalData()">get final()</button>
+    <button (click)="getIOCTLHousekeepingData()">ioctl()</button>
+    <button (click)="getMinMax()">minmax()</button>
+    <button (click)="getPhotoData()">photo data()</button>
+    <button (click)="getSWCDHHardwareHousekeepingData()">swcdh hard()</button>
+    <button (click)="getSWCDHSoftwareHousekeepingData()">swcdh soft()</button>
+    <button (click)="getSWEMHousekeepingData()">swem ()</button>
+    <button (click)="getSWNAVHousekeepingData()">swnav()</button>
+    <button (click)="getFlightEnvironmentData()">flight env()</button>
+</div>
+-->
+<div class="grid-container">
+    <app-map class="grid-map"></app-map>
+    <app-clock class="grid-clock"></app-clock>
+
+    <!-- Left -->
+    <div class="column">
+        <app-temperature class="grid-temperature"></app-temperature>
+        <div class="spacer"></div>
+        <app-altitude class="grid-altitude"></app-altitude>
+        <div class="spacer"></div>
+    </div>
+
+    <!-- Right -->
+    <div class="column">
+        <app-image class="grid-image"></app-image>
+        <div class="spacer"></div>
+        <app-gravity class="grid-gravity"></app-gravity>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        Designed and developed by the <a href="https://github.com/Space-Potatoes">Space Potatoes Team</a> in 2019<br />
+        Data provided and distributed by the <a href="http://asc-csa.gc.ca/">Canadian Space Agency</a>
+    </div>
+</div>

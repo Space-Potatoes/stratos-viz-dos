@@ -1,0 +1,70 @@
+.wrapper {
+    background: #FFFFFF;
+    border-radius: 5px;
+    padding: 16px;
+
+    grid-template-rows: auto auto;
+    display: grid;
+
+    > div {
+        grid-column: 1;
+        grid-row: 2;
+
+        &.hidden {
+            display: none;
+        }
+    }
+}
+
+h3 {
+    font-family: Helvetica Neue, Helvetica, sans-serif;
+    margin: 0px 0px 16px 0px;
+}
+
+.junior-astronaut {
+    grid-template-columns: auto 1fr;
+    display: grid;
+
+    .column {
+        justify-content: space-around;
+        flex-direction: column;
+        padding: 16px;
+        display: flex;
+
+        .explanation {
+            font-family: Helvetica Neue, Helvetica, sans-serif;
+            font-size: 14px;
+        }
+
+        .multiplier {
+            font-family: Helvetica Neue, Helvetica, sans-serif;
+            color: #6799C5;
+            font-weight: 500;
+            font-size: 56px;
+            display: block;
+        }
+
+        .value {
+            font-family: Helvetica Neue, Helvetica, sans-serif;
+            color: #E4514D;
+            font-size: 16px;
+        }
+    }
+
+    img {
+        border-radius: 5px;
+        max-width: 150px;
+    }
+}
+
+.enthusiast {
+
+    .enthusiast-svg {
+
+        width: 100%;
+
+        .text {
+            font-family: Helvetica Neue, Helvetica, sans-serif;
+        }
+    }
+}

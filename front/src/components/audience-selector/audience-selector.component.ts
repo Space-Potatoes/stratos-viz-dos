@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { Audience } from '../../../types/audience';
+import { Component, ViewChild, ElementRef, AfterViewInit, OnInit, HostListener } from '@angular/core';
+import { Audience, TextForAudience } from '../../types/audience';
 import * as d3 from "d3";
 
 @Component({
@@ -30,7 +30,7 @@ export class AudienceSelectorComponent implements AfterViewInit {
 	}
 
 	// Animations
-	public shrink() {
+	private shrink() {
 
 		// Hide Team Logo
 		const teamLogo = d3.select(this.teamLogo.nativeElement);
@@ -47,6 +47,7 @@ export class AudienceSelectorComponent implements AfterViewInit {
 		// Align hero
 		const hero = d3.select(this.hero.nativeElement);
 		hero.transition().duration(1000).style("padding-right", "0px").style("height", "75px");
+		hero.select(".badge").transition().duration(1000).style("height", "0px").style("opacity", 0).style("display", "none");
 
 		// Hide unchecked options
 		const options = d3.select(this.selector.nativeElement).selectAll(".option");
@@ -87,17 +88,25 @@ export class AudienceSelectorComponent implements AfterViewInit {
 
 		// Recolor overlay
 		const overlay = d3.select(this.overlay.nativeElement);
-		overlay.transition().duration(1000).style("background-color", "darkcyan");
+		overlay.transition().duration(1000).style("background-color", "#1464AC");
 
 	}
 
 	// Methods
-	private selectAudience(audience : Audience, event : MouseEvent) {
-		if (this.audience == audience) return;
+	public selectAudience(audience : Audience, event : MouseEvent) {
+		
+		const selector = d3.select(this.selector.nativeElement).select(".checked");
 
-		const selector = d3.select(this.selector.nativeElement);
-		selector.select(".checked").classed("checked", false);
-		d3.select(<HTMLSpanElement> event.srcElement).classed("checked", true);
+		if (this.audience == undefined) {
+			selector.classed("checked", false);
+			d3.select(<HTMLSpanElement> event.srcElement).classed("checked", true);
+			d3.select("body").style("overflow", "auto");
+			this.shrink();
+		}
+		else {
+			audience = (this.audience % 3) + 1;
+			selector.text(TextForAudience(audience));
+		}
 
 		this.audience = audience;
 		if (this.audienceCallback) this.audienceCallback(this.audience);
@@ -105,6 +114,14 @@ export class AudienceSelectorComponent implements AfterViewInit {
 
 	// Lifecycle
 	ngAfterViewInit() {
+
+		if ('scrollRestoration' in history) {
+			// Back off, browser, I got this...
+			history.scrollRestoration = 'manual';
+		}
+
+		window.scroll(0, 0);
+		d3.select("body").style("overflow", "hidden");
 	}
 
 	// Constructor

@@ -1,0 +1,53 @@
+.grid {
+    text-align: center;
+
+    &-container {
+        max-width: 1000px;
+        column-gap: 16px;
+        margin: 0 auto;
+        display: grid;
+
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas: "map    map"
+                             "graph  list"
+                             "gravity gravity";
+        row-gap: 16px;
+        padding: 16px;
+
+        > div {
+            border-radius: 5px;
+            overflow: hidden;
+        }
+    }
+
+    &-map {
+        grid-column-start: 1;
+        grid-column-end: 3;
+        height: 220px;
+    }
+
+    &-clock {
+        grid-column-start: 1;
+        grid-column-end: 3;
+
+        
+    }
+}
+
+.spacer {
+    margin-top: 16px;
+}
+
+.footer {
+    font-family: Helvetica Neue, Helvetica, sans-serif;
+    padding: 64px 32px 32px 32px;
+    text-align: center;
+    font-size: 12px;
+
+    grid-column-start: 1;
+    grid-column-end: 3;
+
+    &-gravity {
+        grid-area: gravity;
+    }
+}
