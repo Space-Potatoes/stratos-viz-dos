@@ -1,10 +1,14 @@
-import argparse
+from datetime import datetime
+import random
 from flask import Flask, request
+from flask_cors import CORS, cross_origin
 from flask_restful import Resource, Api
+import itertools
 from pymongo import MongoClient
 from bson.json_util import dumps
 
 app = Flask(__name__)
+CORS(app)
 api = Api(app)
 
 mongo_client_dev = MongoClient('mongodb://localhost:27017/')
@@ -20,12 +24,12 @@ class HelloWorld(Resource):
 class swcdh_hw0(Resource):
     def get(self):
         start = request.args.get('start')
+        collection = db.swcdh_hw0
         if not start:
-            return 400, 'Missing parameter: start'
+            return dumps(collection.find())
         end = request.args.get('end')
         if not end:
-            return 400, 'Missing parameter: end'
-        collection = db.swcdh_hw0
+            return dumps(collection.find())
         data = []
         query = {"MISSION_TIME": {"$gte": start, "$lt": end}}
         for item in collection.find(query):
@@ -35,12 +39,12 @@ class swcdh_hw0(Resource):
 class swcdh_hkp0(Resource):
     def get(self):
         start = request.args.get('start')
+        collection = db.swcdh_hkp0
         if not start:
-            return 400, 'Missing parameter: start'
+            return dumps(collection.find())
         end = request.args.get('end')
         if not end:
-            return 400, 'Missing parameter: end'
-        collection = db.swcdh_hkp0
+            return dumps(collection.find())
         data = []
         query = {"MISSION_TIME": {"$gte": start, "$lt": end}}
         for item in collection.find(query):
@@ -50,12 +54,12 @@ class swcdh_hkp0(Resource):
 class swcdh_ack(Resource):
     def get(self):
         start = request.args.get('start')
+        collection = db.swcdh_ack
         if not start:
-            return 400, 'Missing parameter: start'
+            return dumps(collection.find())
         end = request.args.get('end')
         if not end:
-            return 400, 'Missing parameter: end'
-        collection = db.swcdh_ack
+            return dumps(collection.find())
         data = []
         query = {"MISSION_TIME": {"$gte": start, "$lt": end}}
         for item in collection.find(query):
@@ -65,11 +69,12 @@ class swcdh_ack(Resource):
 class swcdh_events(Resource):
     def get(self):
         start = request.args.get('start')
+        collection = db.swcdh_events
         if not start:
-            return 400, 'Missing parameter: start'
+            return dumps(collection.find())
         end = request.args.get('end')
         if not end:
-            return 400, 'Missing parameter: end'
+            return dumps(collection.find())
         collection = db.swcdh_events
         data = []
         query = {"MISSION_TIME": {"$gte": start, "$lt": end}}
@@ -77,60 +82,103 @@ class swcdh_events(Resource):
             data.append(item)
         return dumps(data)
 
+
+def mid_range(collection, mid):
+    # HACK convert mid to valid format.
+    mid = datetime.utcfromtimestamp(int(mid)).strftime('%Y-%m-%d %H:%M:%S.%f')
+    query_top = {"MISSION_TIME": {"$gte": mid}}
+    query_bottom = {"MISSION_TIME": {"$lt": mid}}
+    top = list(collection.find(query_top))[0:15]
+    # bottom = list(collection.find(query_bottom))[0:15]
+    # for t in top:
+    #    bottom.append(t)
+    # return dumps(bottom)
+    return dumps(top)
+
+def mid_range_hkp(collection, mid):
+    # HACK convert mid to valid format.
+    mid = datetime.utcfromtimestamp(int(mid)).strftime('%Y-%m-%d %H:%M:%S.%f')
+    query_top = {"MISSION_TIME": {"$gte": mid}}
+    query_bottom = {"MISSION_TIME": {"$lt": mid}}
+    top = list(collection.find(query_top))[0:15]
+    # DATA HACK
+    for idx, row in enumerate(top):
+        if 'NAVIO_TEMP' in row:
+            top[idx]['NAVIO_TEMP'] = str(random.randint(-50, 100))
+    return dumps(top)
+
 class swnav_pos0(Resource):
     def get(self):
+        collection = db.swnav_pos0
+        mid = request.args.get('mid')
+        if mid:
+            return mid_range(collection, mid)
         start = request.args.get('start')
         if not start:
-            return 400, 'Missing parameter: start'
+            return dumps(collection.find()[1000:6000])
         end = request.args.get('end')
         if not end:
-            return 400, 'Missing parameter: end'
-        collection = db.swnav_pos0
+            return dumps(collection.find()[1000:6000])
         data = []
         query = {"MISSION_TIME": {"$gte": start, "$lt": end}}
-        for item in collection.find(query):
+        for item in collection.find(query)[1000:6000]:
             data.append(item)
         return dumps(data)
 
+class swnav_pos0_min_max(Resource):
+    def get(self):
+        collection = db.swnav_pos0
+        min_val = collection.find_one(sort=[("MISSION_TIME", 1)])
+        max_val = collection.find_one(sort=[("MISSION_TIME", -1)])
+        payload = {
+            "min": dumps(min_val),
+            "max": dumps(max_val)
+        }
+        return payload
+
 class swnav_hkp(Resource):
     def get(self):
+        collection = db.swnav_hkp
+        mid = request.args.get('mid')
+        if mid:
+            return mid_range_hkp(collection, mid)
         start = request.args.get('start')
         if not start:
-            return 400, 'Missing parameter: start'
+            return dumps(collection.find()[1000:6000])
         end = request.args.get('end')
         if not end:
-            return 400, 'Missing parameter: end'
-        collection = db.swnav_hkp
+            return dumps(collection.find()[1000:6000])
         data = []
         query = {"MISSION_TIME": {"$gte": start, "$lt": end}}
-        for item in collection.find(query):
+        for item in collection.find(query)[1000:6000]:
             data.append(item)
         return dumps(data)
 
 class swem_event(Resource):
     def get(self):
         start = request.args.get('start')
+        collection = db.swem_event
         if not start:
-            return 400, 'Missing parameter: start'
+            return dumps(collection.find())
         end = request.args.get('end')
         if not end:
-            return 400, 'Missing parameter: end'
-        collection = db.swem_event
+            return dumps(collection.find())
         data = []
         query = {"MISSION_TIME": {"$gte": start, "$lt": end}}
         for item in collection.find(query):
             data.append(item)
         return dumps(data)
 
+
 class swem_em0(Resource):
     def get(self):
         start = request.args.get('start')
+        collection = db.swem_em0
         if not start:
-            return 400, 'Missing parameter: start'
+            return dumps(collection.find())
         end = request.args.get('end')
         if not end:
-            return 400, 'Missing parameter: end'
-        collection = db.swem_em0
+            return dumps(collection.find())
         data = []
         query = {"MISSION_TIME": {"$gte": start, "$lt": end}}
         for item in collection.find(query):
@@ -140,12 +188,12 @@ class swem_em0(Resource):
 class swem_hk(Resource):
     def get(self):
         start = request.args.get('start')
+        collection = db.swem_hk
         if not start:
-            return 400, 'Missing parameter: start'
+            return dumps(collection.find())
         end = request.args.get('end')
         if not end:
-            return 400, 'Missing parameter: end'
-        collection = db.swem_hk
+            return dumps(collection.find())
         data = []
         query = {"MISSION_TIME": {"$gte": start, "$lt": end}}
         for item in collection.find(query):
@@ -155,12 +203,12 @@ class swem_hk(Resource):
 class swem_ahr0(Resource):
     def get(self):
         start = request.args.get('start')
+        collection = db.swem_ahr0
         if not start:
-            return 400, 'Missing parameter: start'
+            return dumps(collection.find())
         end = request.args.get('end')
         if not end:
-            return 400, 'Missing parameter: end'
-        collection = db.swem_ahr0
+            return dumps(collection.find())
         data = []
         query = {"MISSION_TIME": {"$gte": start, "$lt": end}}
         for item in collection.find(query):
@@ -170,12 +218,12 @@ class swem_ahr0(Resource):
 class AHR0_log(Resource):
     def get(self):
         start = request.args.get('start')
+        collection = db.AHR0_log
         if not start:
-            return 400, 'Missing parameter: start'
+            return dumps(collection.find())
         end = request.args.get('end')
         if not end:
-            return 400, 'Missing parameter: end'
-        collection = db.AHR0_log
+            return dumps(collection.find())
         data = []
         query = {"MISSION_TIME": {"$gte": start, "$lt": end}}
         for item in collection.find(query):
@@ -185,17 +233,48 @@ class AHR0_log(Resource):
 class ioctl_hkp(Resource):
     def get(self):
         start = request.args.get('start')
+        collection = db.ioctl_hkp
         if not start:
-            return 400, 'Missing parameter: start'
+            return dumps(collection.find())
         end = request.args.get('end')
         if not end:
-            return 400, 'Missing parameter: end'
-        collection = db.ioctl_hkp
+            return dumps(collection.find())
         data = []
         query = {"MISSION_TIME": {"$gte": start, "$lt": end}}
         for item in collection.find(query):
             data.append(item)
         return dumps(data)
+
+class final(Resource):
+    def get(self):
+        mid = request.args.get('mid')
+        if not mid:
+            return 400, ''
+        mid = datetime.utcfromtimestamp(int(mid)).strftime('%Y-%m-%d %H:%M:%S.%f')
+        collection = db.final
+        bottom_query = {"MISSION_TIME": {"$gte": mid}, "IMAGE_PATH": {"$regex": ".*NADIR"}}
+        front_query = {"MISSION_TIME": {"$gte": mid}, "IMAGE_PATH": {"$regex": ".*HOR"}}
+        bottom = collection.find_one(bottom_query)
+        front = collection.find_one(front_query)
+        result = {
+            "bottom_view": dumps(bottom),
+            "front_view": dumps(front)
+        }
+        return result
+        '''
+        start = request.args.get('start')
+        collection = db.final
+        if not start:
+            return dumps(collection.find())
+        end = request.args.get('end')
+        if not end:
+            return dumps(collection.find())
+        data = []
+        query = {"MISSION_TIME": {"$gte": start, "$lt": end}}
+        for item in collection.find(query):
+            data.append(item)
+        return dumps(data)
+        '''
 
 
 api.add_resource(HelloWorld, '/')
@@ -207,6 +286,7 @@ api.add_resource(swcdh_hkp0, '/TIMMINS2018/CDH/HKP/swcdh_hkp0')
 api.add_resource(swcdh_events, '/TIMMINS2018/CDH/HKP/swcdh_events')
 
 api.add_resource(swnav_pos0, '/TIMMINS2018/NAVEM/swnav_pos0')
+api.add_resource(swnav_pos0_min_max, '/TIMMINS2018/NAVEM/swnav_pos0/min_max')
 api.add_resource(swnav_hkp, '/TIMMINS2018/NAVEM/swnav_hkp')
 api.add_resource(swem_event, '/TIMMINS2018/NAVEM/swem_event')
 api.add_resource(swem_em0, '/TIMMINS2018/NAVEM/swem_em0')
@@ -215,6 +295,8 @@ api.add_resource(swem_ahr0, '/TIMMINS2018/NAVEM/swem_ahr0')
 api.add_resource(AHR0_log, '/TIMMINS2018/NAVEM/AHR0_log')
 
 api.add_resource(ioctl_hkp, '/TIMMINS2018/IOCTL/ioctl_hkp')
+
+api.add_resource(final, '/TIMMINS2018/final')
 
 '''
 'INVALID TIMMINS2018/CDH_tm_processed.txt
@@ -238,9 +320,4 @@ api.add_resource(ioctl_hkp, '/TIMMINS2018/IOCTL/ioctl_hkp')
 '''
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='A REST API for querying NASA Hackathon data by MISSION_TIME.')
-    parser.add_argument('--host', dest='host', type=str, help='Host or network interface to listen on.', required=True)
-    parser.add_argument('--port', dest='port', type=int, help='The port to listen on.', required=True)
-    parser.add_argument('--debug', dest='debug', type=bool, help='Run in debug mode?', required=True)
-    args = parser.parse_args()
-    app.run(debug=args.debug, host=args.host, port=args.port)
+    app.run()
