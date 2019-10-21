@@ -242,17 +242,19 @@ export class TemperatureComponent implements AfterViewInit, AudienceListener, Ti
     const prevCircle = svg.append("circle").classed("prevCircle", true);
     prevCircle.attr("cx", yAxisBox.width + 20 + labelPrevBox.width / 2);
     prevCircle.attr("cy", scale(this.unitConv(this.prevTemperature)));
-    prevCircle.attr("fill", "red");
+    prevCircle.attr("fill", "#1464AC");
     prevCircle.attr("r", 3);
     
     const currPoint = svg.append("circle").classed("currCircle", true);
     currPoint.attr("cx", yAxisBox.width + labelPrevBox.width + 50 + labelCurrBox.width / 2);
     currPoint.attr("cy", scale(this.unitConv(this.temperature)));
+    currPoint.attr("fill", "#E4514D");
     currPoint.attr("r", 3);
 
     const nextCircle = svg.append("circle").classed("nextCircle", true);
     nextCircle.attr("cx", yAxisBox.width + labelPrevBox.width + labelCurrBox.width + 80 + labelNextBox.width / 2);
     nextCircle.attr("cy", scale(this.unitConv(this.nextTemperature)));
+    nextCircle.attr("fill", "#1464AC");
     nextCircle.attr("r", 3);
 
     this.hasDrawnProfessional = true;

@@ -32,6 +32,16 @@ export class ImageComponent implements AfterViewInit, AudienceListener, Timestam
   public onTimeStampChange(timestamp : number) {
     this.redraw();
 
+    const number1 = Math.floor(Math.random() * 6) + 1;
+    const number2 = (Math.floor(Math.random() * 3) + number1) % 7 + 1;
+
+    const path1 = "../../assets/fakes/" + number1 + ".jpg";
+    const path2 = "../../assets/fakes/" + number2 + ".jpg";
+
+    d3.select(this.enthusiast.nativeElement).select("img").attr("src", null).attr("src", path2);
+    d3.select(this.junior.nativeElement).select("img").attr("src", null).attr("src", path1);
+
+    /* Left out for presentation
     this.dataService.getImageInfo(timestamp).subscribe(info => {
 
       const bottom_view = JSON.parse(info.bottom_view);
@@ -43,6 +53,7 @@ export class ImageComponent implements AfterViewInit, AudienceListener, Timestam
       d3.select(this.junior.nativeElement).select("img").attr("src", null).attr("src", frt_img);
       d3.select(this.enthusiast.nativeElement).select("img").attr("src", null).attr("src", bot_img);
     });
+    */
   }
 
   private redraw() {

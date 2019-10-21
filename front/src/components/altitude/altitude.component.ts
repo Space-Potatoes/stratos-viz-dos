@@ -235,7 +235,7 @@ export class AltitudeComponent implements AfterViewInit, AudienceListener, Times
       .transition()
       .duration(250)
       .attr("y", Math.max(valHeight - 10, 25))
-      .text(`${Math.round(this.height)}KM`);
+      .text(`${Math.round(this.height)}m`);
 
   }
   private drawEnthusiast() {
@@ -300,7 +300,7 @@ export class AltitudeComponent implements AfterViewInit, AudienceListener, Times
 
     const valText = svg.append("text").classed("val-text", true);
     valText.style("font-family", "Helvetica Neue, Helvetica, sans-serif");
-    valText.text(`${this.height}KM`);
+    valText.text(`${this.height}m`);
     valText.attr("fill", "#1464AC");
     valText.attr("x", 16);
 
